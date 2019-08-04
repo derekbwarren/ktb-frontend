@@ -96,7 +96,7 @@ const Logo = styled(Typography).attrs({
   @import url('https://fonts.googleapis.com/css?family=Exo:500i&display=swap');
   &&& {
     font-family: 'Exo', sans-serif;
-    text-shadow: 1px 2px 4px rgba(0,0,0,0.4);
+    text-shadow: 1px 2px 4px rgba(0,0,0,0.2);
     padding-right: 4px;
 
     &.menu {
