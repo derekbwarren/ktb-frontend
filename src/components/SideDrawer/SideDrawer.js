@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { withRouter } from 'react-router'
 
 import {
   AppBar,
@@ -17,7 +18,7 @@ import {
   makeStyles,
   useTheme
 } from '@material-ui/core/styles'
-import { ChevronLeft, ChevronRight, Menu as MenuIcon, Inbox, Mail } from '@material-ui/icons'
+import { ChevronLeft, ChevronRight, Menu as MenuIcon } from '@material-ui/icons'
 import { navItems } from '../../constants'
 import clsx from 'clsx';
 
@@ -84,11 +85,12 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const SideDrawer = ({ 
+const SideDrawer = ({
   children,
   history,
   ...props
 }) => {
+  const pathname = new URLSearchParams(props.location).get('pathname')
   const classes = useStyles()
   const theme = useTheme()
   const [open, setOpen] = useState(true)
@@ -149,8 +151,13 @@ const SideDrawer = ({
         <Divider />
         <List>
           {
-            navItems.map((item, index) => (
-              <ListItem button key={item.text} onClick={() => history.push(item.link)}>
+            navItems.map(item => (
+              <ListItem
+                button
+                key={item.text}
+                selected={pathname === item.link}
+                onClick={() => history.push(item.link)}
+              >
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.text} />
               </ListItem>
@@ -166,4 +173,4 @@ const SideDrawer = ({
   )
 }
 
-export default SideDrawer
+export default withRouter(SideDrawer)

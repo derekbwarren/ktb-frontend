@@ -2,12 +2,11 @@ import React, { Component, Fragment } from 'react';
 import { Route, Switch } from 'react-router'
 
 import { Home, Managers, NewManager } from './containers'
-import { SideDrawer, Sidebar, Toolbar } from './components'
+import { SideDrawer } from './components'
 
 class App extends Component {
   constructor(props) {
     super(props)
-    console.log('props', props)
 
     this.state = {}
   }
@@ -15,9 +14,6 @@ class App extends Component {
   render() {
     return (
       <Fragment>
-
-        {/* <Sidebar />
-        <Toolbar /> */}
         <SideDrawer {...this.props}>
           <Switch>
             <Route exact
