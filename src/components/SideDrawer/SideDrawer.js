@@ -18,6 +18,7 @@ import {
   useTheme
 } from '@material-ui/core/styles'
 import { ChevronLeft, ChevronRight, Menu as MenuIcon, Inbox, Mail } from '@material-ui/icons'
+import { navItems } from '../../constants'
 import clsx from 'clsx';
 
 const DRAWER_WIDTH = 240
@@ -83,7 +84,11 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const SideDrawer = ({ children }) => {
+const SideDrawer = ({ 
+  children,
+  history,
+  ...props
+}) => {
   const classes = useStyles()
   const theme = useTheme()
   const [open, setOpen] = useState(true)
@@ -143,12 +148,14 @@ const SideDrawer = ({ children }) => {
         </div>
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <Inbox /> : <Mail />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          {
+            navItems.map((item, index) => (
+              <ListItem button key={item.text} onClick={() => history.push(item.link)}>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItem>
+            ))
+          }
         </List>
       </Drawer>
       <main className={classes.content}>
