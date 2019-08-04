@@ -1,5 +1,5 @@
-import React, { Component, Fragment } from 'react';
-import { Route, Switch } from 'react-router'
+import React, { Component, Fragment } from 'react'
+import { Redirect, Route, Switch } from 'react-router'
 
 import { Home, Managers, NewManager } from './containers'
 import { SideDrawer } from './components'
@@ -16,19 +16,23 @@ class App extends Component {
       <Fragment>
         <SideDrawer {...this.props}>
           <Switch>
-            <Route exact
+            <Route
+              exact
               path="/"
-              render={props => (
-                <Home {...props} />
+              render={() => (
+                // <Home {...props} />
+                <Redirect push to="/managers" />
               )}
             />
-            <Route exact
+            <Route
+              exact
               path="/managers"
               render={props => (
                 <Managers {...props} />
               )}
             />
-            <Route exact
+            <Route
+              exact
               path="/managers/new"
               render={props => (
                 <NewManager {...props} />
@@ -37,8 +41,8 @@ class App extends Component {
           </Switch>
         </SideDrawer>
       </Fragment>
-    );
+    )
   }
 }
 
-export default App;
+export default App

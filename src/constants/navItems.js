@@ -5,18 +5,21 @@ const navItems = [
   {
     text: 'Home',
     icon: <Home />,
-    link: '/'
+    link: '/',
+    display: false,
   },
   {
     text: 'View Managers',
     icon: <Person />,
-    link: '/managers'
+    link: '/managers',
+    display: true,
   },
   {
     text: 'Add New Manager',
     icon: <PersonAdd />,
-    link: '/managers/new'
-  }
+    link: '/managers/new',
+    display: true,
+  },
 ]
 
 export default navItems
