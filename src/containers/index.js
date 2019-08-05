@@ -5,5 +5,5 @@ import NewManager from './NewManager'
 export {
   Home,
   Managers,
-  NewManager
+  NewManager,
 }

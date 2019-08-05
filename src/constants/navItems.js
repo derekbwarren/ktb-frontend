@@ -9,7 +9,7 @@ const navItems = [
     display: false,
   },
   {
-    text: 'View Managers',
+    text: 'All Managers',
     icon: <Person />,
     link: '/managers',
     display: true,

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { Redirect, Route, Switch } from 'react-router'
 
-import { Home, Managers, NewManager } from './containers'
+import { Managers, NewManager } from './containers'
 import { SideDrawer } from './components'
 
 class App extends Component {

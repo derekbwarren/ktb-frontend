@@ -10,6 +10,8 @@ import * as serviceWorker from './serviceWorker'
 
 const history = createBrowserHistory()
 
+document.title = 'KnowThyBoss'
+
 ReactDOM.render(<Router history={history}><App history={history} /></Router>, document.getElementById('root'))
 
 // If you want your app to work offline and load faster, you can change
