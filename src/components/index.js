@@ -1,5 +1,6 @@
 import SideDrawer from './SideDrawer/SideDrawer'
+import NetPromoterScore from './About/NetPromoterScore'
 
 export {
-  SideDrawer,
+  NetPromoterScore, SideDrawer,
 }

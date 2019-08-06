@@ -27,7 +27,7 @@ const managers = [
     rating: 88,
   },
   {
-    id: 3,
+    id: 4,
     firstName: 'Stan',
     lastName: 'Lee',
     company: 'Capital One',

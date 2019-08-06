@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import React, { Fragment, useState, useEffect } from 'react'
+import { makeStyles, withStyles } from '@material-ui/core/styles'
 import {
-  Card, CardContent, Typography,
+  Button, Card, CardContent, Typography, TextField, Tooltip, Zoom,
 } from '@material-ui/core'
+import { NetPromoterScore } from '../components'
 // import { SkipNext, SkipPrevious, PlayArrow } from '@material-ui/icons'
 import { managers as mockManagers } from '../mocks'
 
@@ -12,6 +13,15 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     flexWrap: 'wrap',
+    marginLeft: '4em',
+    marginRight: '4em',
+  },
+  textField: {
+    marginTop: '0',
+    marginBottom: '24px',
+    marginLeft: '4em',
+    marginRight: theme.spacing(1),
+    width: 260,
   },
   card: {
     display: 'flex',
@@ -57,10 +67,20 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
+const LightTooltip = withStyles(theme => ({
+  tooltip: {
+    backgroundColor: theme.palette.common.white,
+    color: 'rgba(0, 0, 0, 0.87)',
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+  },
+}))(Tooltip)
+
 const Managers = () => {
   const classes = useStyles()
   // const theme = useTheme()
   const [managers, setManagers] = useState([])
+  const [filterText, setFilter] = useState('')
 
   useEffect(() => {
     setManagers(mockManagers)
@@ -73,10 +93,23 @@ const Managers = () => {
     if (rating < 0) { return 'bad' }
     return 'default'
   }
+  const handleFilter = () => {
+    setManagers(managers.filter(manager => manager.firstName.includes(filterText) || manager.lastName.includes(filterText)))
+  }
 
   return (
-    <div className={classes.container}>
-      {
+    <Fragment>
+      <TextField
+        id="filter-managers"
+        label="Filter Managers"
+        type="search"
+        className={classes.textField}
+        value={filterText}
+        onChange={(e) => { setFilter(e.target.value); handleFilter() }}
+        // margin="normal"
+      />
+      <div className={classes.container}>
+        {
         managers.map((manager) => {
           const {
             id, firstName, lastName, company, level, organization, rating,
@@ -101,20 +134,24 @@ const Managers = () => {
                   </Typography>
                 </CardContent>
                 <CardContent>
-                  <Typography component="h5" variant="h5" className={classes[getRatingClass(rating)]}>
-                    {rating}
-                  </Typography>
-                  <Typography variant="subtitle1" color="textSecondary">
-                    NPS Rating
-                  </Typography>
+                  <LightTooltip TransitionComponent={Zoom} title={<NetPromoterScore />} placement="left" interactive>
+                    <div>
+                      <Typography component="h5" variant="h5" className={classes[getRatingClass(rating)]}>
+                        {rating}
+                      </Typography>
+                      <Typography variant="subtitle1" color="textSecondary">
+                      Rating
+                      </Typography>
+                    </div>
+                  </LightTooltip>
                 </CardContent>
               </div>
             </Card>
           )
         })
-
       }
-    </div>
+      </div>
+    </Fragment>
   )
 }
 

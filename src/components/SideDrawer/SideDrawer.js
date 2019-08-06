@@ -26,7 +26,7 @@ import { ChevronLeft, ChevronRight, Menu as MenuIcon } from '@material-ui/icons'
 import clsx from 'clsx'
 import { navItems } from '../../constants'
 
-const DRAWER_WIDTH = 240
+const DRAWER_WIDTH = 280
 
 const useStyles = makeStyles(theme => ({
   root: {
