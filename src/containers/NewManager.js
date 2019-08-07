@@ -17,6 +17,12 @@ const useStyles = makeStyles(theme => ({
     marginTop: '16px',
     marginBottom: '16px',
   },
+  fieldFlex: {
+    display: 'flex',
+    flexirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
@@ -37,7 +43,8 @@ const useStyles = makeStyles(theme => ({
 const NewManager = () => {
   const classes = useStyles()
   const [values, setValues] = React.useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     company: '',
     level: '',
     organization: '',
@@ -57,18 +64,32 @@ const NewManager = () => {
         Add New Manager
       </Typography>
       <form className={classes.container} noValidate={false} autoComplete="off" onSubmit={handleSubmit}>
-        <TextField
-          id="manager-name"
-          label="Name"
-          style={{ margin: '16px 8px 8px 8px' }}
-          fullWidth
-          margin="normal"
-          onChange={handleChange('name')}
-          value={values.name}
-          variant="outlined"
-          helperText="Required"
-          required
-        />
+        <div className={classes.fieldFlex}>
+          <TextField
+            id="manager-first-name"
+            label="First Name"
+            style={{ margin: '16px 8px 8px 8px', width: '50%' }}
+            fullWidth
+            margin="normal"
+            onChange={handleChange('firstName')}
+            value={values.firstName}
+            variant="outlined"
+            helperText="Required"
+            required
+          />
+          <TextField
+            id="manager-last-name"
+            label="Last Name"
+            style={{ margin: '16px 8px 8px 8px', width: '50%' }}
+            fullWidth
+            margin="normal"
+            onChange={handleChange('lastName')}
+            value={values.lastName}
+            variant="outlined"
+            helperText="Required"
+            required
+          />
+        </div>
         <TextField
           id="manager-company"
           select
