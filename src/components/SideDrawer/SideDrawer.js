@@ -7,6 +7,7 @@ import styled from 'styled-components'
 
 import {
   AppBar,
+  Button,
   CssBaseline,
   Drawer,
   Toolbar,
@@ -33,11 +34,12 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
   },
   appBar: {
-    zIndex: theme.zIndex.drawer + 1,
+    // zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    boxShadow: '0 2px 4px 0 rgba(0,0,0,0.2)',
   },
   appBarShift: {
     marginLeft: DRAWER_WIDTH,
@@ -53,13 +55,22 @@ const useStyles = makeStyles(theme => ({
   hide: {
     display: 'none',
   },
+  visibility: {
+    visibility: 'hidden',
+  },
   drawer: {
     width: DRAWER_WIDTH,
     flexShrink: 0,
     whiteSpace: 'nowrap',
+    backgroundColor: '#303030',
   },
   drawerOpen: {
     width: DRAWER_WIDTH,
+    backgroundColor: '#1389e4',
+    backgroundImage: 'url(/assets/images/crystals_bg.png)',
+    backgroundSize: 'contain',
+    backgroundPosition: 'bottom',
+    backgroundRepeat: 'no-repeat',
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -72,6 +83,7 @@ const useStyles = makeStyles(theme => ({
     }),
     overflowX: 'hidden',
     width: theme.spacing(7) + 1,
+    backgroundColor: '#1389e4',
     [theme.breakpoints.up('sm')]: {
       width: theme.spacing(9) + 1,
     },
@@ -87,6 +99,13 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
+  loginButton: {
+    color: 'rgba(0, 0, 0, 0.87)',
+  },
+  list: {
+    backgroundColor: '#1389e4',
+    color: '#fff',
+  },
 }))
 
 // styles
@@ -98,6 +117,7 @@ const Logo = styled(Typography).attrs({
     font-family: 'Exo', sans-serif;
     text-shadow: 1px 2px 4px rgba(0,0,0,0.2);
     padding-right: 4px;
+    color: '#000';
 
     &.menu {
       margin-left: 32px;
@@ -105,8 +125,13 @@ const Logo = styled(Typography).attrs({
   }
 `
 const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: inherit;
+  &&& {
+    text-decoration: none;
+    color: ${({ open }) => (open ? '#fff' : '#000')};
+    &.app-bar {
+      visibility: ${({ open }) => (open ? 'hidden' : 'visible')};
+    }
+  }
 `
 
 const SideDrawer = ({
@@ -119,11 +144,8 @@ const SideDrawer = ({
   const theme = useTheme()
   const [open, setOpen] = useState(true)
 
-  const handleDrawerOpen = () => {
-    setOpen(true)
-  }
-  const handleDrawerClose = () => {
-    setOpen(false)
+  const handleDrawerToggle = () => {
+    setOpen(!open)
   }
 
   return (
@@ -136,30 +158,40 @@ const SideDrawer = ({
           [classes.appBarShift]: open,
         })}
         style={{
-          background: 'linear-gradient(to right, #2D323E 0%, #3C4252 100%)',
           backgroundSize: 'cover',
-          backgroundColor: '#2D323E',
+          backgroundColor: '#fff',
         }}
       >
         <Toolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            onClick={handleDrawerToggle}
             edge="start"
             className={clsx(classes.menuButton, {
-              [classes.hide]: open,
+              [classes.visibility]: open,
+
             })}
           >
             <MenuIcon />
           </IconButton>
-          {
-            !open && (
-              <StyledLink to="/">
-                <Logo>KnowThyBoss</Logo>
-              </StyledLink>
-            )
-          }
+          <div style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            width: '100%',
+            margin: '0 56px',
+          }}
+          >
+            <StyledLink
+              to="/"
+              open={open}
+              className="app-bar"
+            >
+              <Logo>KnowThyBoss</Logo>
+            </StyledLink>
+            <Button color="inherit" className={classes.loginButton}>Login</Button>
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -176,16 +208,32 @@ const SideDrawer = ({
         }}
         open={open}
       >
-        <div className={classes.toolbar}>
-          <StyledLink to="/">
-            <Logo>KnowThyBoss</Logo>
-          </StyledLink>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRight /> : <ChevronLeft />}
+        <div className={classes.toolbar} style={{ backgroundColor: '#1f7acc', paddingBottom: '32px' }}>
+          <IconButton onClick={handleDrawerToggle} style={{ color: '#fff' }}>
+            {open ? <ChevronLeft /> : <MenuIcon />}
           </IconButton>
         </div>
-        <Divider />
-        <List>
+        <div style={{
+          textAlign: 'center',
+          backgroundColor: '#1389e4',
+        }}
+        >
+          <Logo style={{
+            backgroundColor: '#1389e4',
+            padding: '16px 0',
+            width: '210px',
+            margin: '-32px auto 0 auto',
+            color: 'white',
+            borderRadius: '4px',
+            visibility: open ? '' : 'hidden',
+          }}
+          >
+            <StyledLink to="/" open={open}>
+              KnowThyBoss
+            </StyledLink>
+          </Logo>
+        </div>
+        <List className={classes.list}>
           {
             navItems.map(item => (
               item.display && (
@@ -195,7 +243,7 @@ const SideDrawer = ({
                   selected={pathname === item.link}
                   onClick={() => history.push(item.link)}
                 >
-                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemIcon style={{ color: '#fff' }}>{item.icon}</ListItemIcon>
                   <ListItemText primary={item.text} />
                 </ListItem>
               )
