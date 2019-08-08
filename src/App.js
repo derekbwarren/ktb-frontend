@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { Redirect, Route, Switch } from 'react-router'
 
 import { Managers, NewManager } from './containers'
-import { SideDrawer } from './components'
+import { SideDrawer, SideDrawerV2 } from './components'
 
 class App extends Component {
   constructor(props) {
@@ -14,7 +14,7 @@ class App extends Component {
   render() {
     return (
       <Fragment>
-        <SideDrawer {...this.props}>
+        <SideDrawerV2 {...this.props}>
           <Switch>
             <Route
               exact
@@ -39,7 +39,7 @@ class App extends Component {
               )}
             />
           </Switch>
-        </SideDrawer>
+        </SideDrawerV2>
       </Fragment>
     )
   }
