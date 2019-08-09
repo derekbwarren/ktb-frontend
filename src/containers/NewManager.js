@@ -12,6 +12,9 @@ const useStyles = makeStyles(theme => ({
     width: '60%',
     margin: '0 auto',
     justifyContent: 'center',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
   },
   fieldContainer: {
     marginTop: '16px',
@@ -19,9 +22,28 @@ const useStyles = makeStyles(theme => ({
   },
   fieldFlex: {
     display: 'flex',
-    flexirection: 'row',
+    flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+    },
+  },
+  firstName: {
+    margin: '16px 8px 8px 8px',
+    width: '50%',
+    [theme.breakpoints.down('sm')]: {
+      width: 'auto',
+      margin: '16px 8px 8px 8px',
+    },
+  },
+  lastName: {
+    margin: '16px 8px 8px 8px',
+    width: '50%',
+    [theme.breakpoints.down('sm')]: {
+      width: 'auto',
+      margin: 8,
+    },
   },
   textField: {
     marginLeft: theme.spacing(1),
@@ -68,7 +90,7 @@ const NewManager = () => {
           <TextField
             id="manager-first-name"
             label="First Name"
-            style={{ margin: '16px 8px 8px 8px', width: '50%' }}
+            className={classes.firstName}
             fullWidth
             margin="normal"
             onChange={handleChange('firstName')}
@@ -80,7 +102,7 @@ const NewManager = () => {
           <TextField
             id="manager-last-name"
             label="Last Name"
-            style={{ margin: '16px 8px 8px 8px', width: '50%' }}
+            className={classes.lastName}
             fullWidth
             margin="normal"
             onChange={handleChange('lastName')}

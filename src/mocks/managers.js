@@ -4,7 +4,7 @@ const managers = [
     firstName: 'Stan',
     lastName: 'Lee',
     company: 'Capital One',
-    level: 'Director',
+    level: 'Senior Director',
     organization: 'Card',
     rating: 32,
   },

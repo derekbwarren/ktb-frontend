@@ -15,6 +15,10 @@ const useStyles = makeStyles(theme => ({
     flexWrap: 'wrap',
     marginLeft: '4em',
     marginRight: '4em',
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: '0',
+      marginRight: '0',
+    },
   },
   textField: {
     marginTop: '0',
@@ -22,6 +26,9 @@ const useStyles = makeStyles(theme => ({
     marginLeft: '4em',
     marginRight: theme.spacing(1),
     width: 260,
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: '0',
+    },
   },
   card: {
     display: 'flex',
@@ -33,9 +40,16 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '100%',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+    },
   },
   content: {
     flex: '1 0 auto',
+    [theme.breakpoints.down('sm')]: {
+      padding: '16px 16px 0 16px',
+    },
   },
   cover: {
     width: 151,
@@ -45,6 +59,17 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     paddingLeft: theme.spacing(1),
     paddingBottom: theme.spacing(1),
+    [theme.breakpoints.down('sm')]: {
+
+    },
+  },
+  ratingContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    [theme.breakpoints.down('sm')]: {
+      // flexDirection: 'row',
+      // alignItems: 'center',
+    },
   },
   playIcon: {
     height: 38,
@@ -94,6 +119,7 @@ const Managers = () => {
     return 'default'
   }
   const handleFilter = () => {
+    // eslint-disable-next-line max-len
     setManagers(managers.filter(manager => manager.firstName.includes(filterText) || manager.lastName.includes(filterText)))
   }
 
@@ -106,7 +132,6 @@ const Managers = () => {
         className={classes.textField}
         value={filterText}
         onChange={(e) => { setFilter(e.target.value); handleFilter() }}
-        // margin="normal"
       />
       <div className={classes.container}>
         {
@@ -135,7 +160,7 @@ const Managers = () => {
                 </CardContent>
                 <CardContent>
                   <LightTooltip TransitionComponent={Zoom} title={<NetPromoterScore />} placement="left" interactive>
-                    <div>
+                    <div className={classes.ratingContainer}>
                       <Typography component="h5" variant="h5" className={classes[getRatingClass(rating)]}>
                         {rating}
                       </Typography>
