@@ -50,8 +50,8 @@ jobs:
       
       # Build Code
       - run:
-        name: Build
-        command: yarn build
+          name: Build
+          command: yarn build
 
       # Deploy Static files!
       - run:
