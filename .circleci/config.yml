@@ -51,7 +51,7 @@ jobs:
       # Build Code
       - run:
           name: Build
-          command: yarn build
+          command: CI=false yarn build
 
       # Deploy Static files!
       - run:
