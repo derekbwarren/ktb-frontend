@@ -47,6 +47,12 @@ jobs:
             git config --global user.name "Derek Warren"
             git remote rm origin
             git remote add origin https://derekbwarren:${GITHUB_TOKEN}@github.com/derekbwarren/ktb-frontend.git
+      
+      # Build Code
+      - run:
+        name: Build
+        command: yarn build
+
       # Deploy Static files!
       - run:
           name: yarn deploy
