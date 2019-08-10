@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 
 import { createBrowserHistory } from 'history'
 import { Router } from 'react-router'
+import { BrowserRouter } from 'react-router-dom'
 
 import './index.css'
 import App from './App'
@@ -12,7 +13,7 @@ const history = createBrowserHistory()
 
 document.title = 'KnowThyBoss'
 
-ReactDOM.render(<Router history={history} basename="/"><App history={history} /></Router>, document.getElementById('root'))
+ReactDOM.render(<BrowserRouter history={history} basename="/ktb-frontend"><App history={history} /></BrowserRouter>, document.getElementById('root'))
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
