@@ -1,8 +1,11 @@
+/* eslint-disable react/prop-types */
 import React, { Component, Fragment } from 'react'
 import { Redirect, Route, Switch } from 'react-router'
 
 import { Managers, NewManager } from './containers'
 import { SideDrawer, SideDrawerV2 } from './components'
+
+require('dotenv').config()
 
 class App extends Component {
   constructor(props) {
@@ -12,10 +15,11 @@ class App extends Component {
   }
 
   render() {
+    const { location } = this.props
     return (
       <Fragment>
         <SideDrawerV2 {...this.props}>
-          <Switch>
+          <Switch location={location}>
             <Route
               exact
               path="/"

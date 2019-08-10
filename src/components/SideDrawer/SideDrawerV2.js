@@ -65,7 +65,7 @@ const useStyles = makeStyles(theme => ({
   drawerPaper: {
     width: DRAWER_WIDTH,
     backgroundColor: '#1389e4',
-    backgroundImage: 'url(/assets/images/crystals_bg.png)',
+    backgroundImage: `url(${process.env.REACT_APP_BASENAME}assets/images/crystals_bg.png)`,
     backgroundSize: 'contain',
     backgroundPosition: 'bottom',
     backgroundRepeat: 'no-repeat',
