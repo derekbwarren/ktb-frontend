@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a832a4a05707db501a157773b47bb0e0",
+    "revision": "d32046cf439c624f5c9aab26fc57c26d",
     "url": "/ktb-frontend/index.html"
   },
   {
-    "revision": "a3bcb85e46f33442ec57",
+    "revision": "0a788adb89dcb70cefca",
     "url": "/ktb-frontend/static/css/main.4699c619.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/ktb-frontend/static/js/2.cbb3afa5.chunk.js"
   },
   {
-    "revision": "a3bcb85e46f33442ec57",
-    "url": "/ktb-frontend/static/js/main.2582c6e7.chunk.js"
+    "revision": "0a788adb89dcb70cefca",
+    "url": "/ktb-frontend/static/js/main.c88a337d.chunk.js"
   },
   {
     "revision": "d6f600e766474944daf2",
