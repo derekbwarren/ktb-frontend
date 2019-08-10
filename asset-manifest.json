@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/ktb-frontend/static/css/main.4699c619.chunk.css",
-    "main.js": "/ktb-frontend/static/js/main.f6b4bab8.chunk.js",
-    "main.js.map": "/ktb-frontend/static/js/main.f6b4bab8.chunk.js.map",
+    "main.js": "/ktb-frontend/static/js/main.8e3dcb1d.chunk.js",
+    "main.js.map": "/ktb-frontend/static/js/main.8e3dcb1d.chunk.js.map",
     "runtime~main.js": "/ktb-frontend/static/js/runtime~main.386e8e35.js",
     "runtime~main.js.map": "/ktb-frontend/static/js/runtime~main.386e8e35.js.map",
-    "static/js/2.66648aa9.chunk.js": "/ktb-frontend/static/js/2.66648aa9.chunk.js",
-    "static/js/2.66648aa9.chunk.js.map": "/ktb-frontend/static/js/2.66648aa9.chunk.js.map",
+    "static/js/2.c0e5a6b4.chunk.js": "/ktb-frontend/static/js/2.c0e5a6b4.chunk.js",
+    "static/js/2.c0e5a6b4.chunk.js.map": "/ktb-frontend/static/js/2.c0e5a6b4.chunk.js.map",
     "index.html": "/ktb-frontend/index.html",
-    "precache-manifest.12539811c04436c00d9e120ecf09d0ff.js": "/ktb-frontend/precache-manifest.12539811c04436c00d9e120ecf09d0ff.js",
+    "precache-manifest.a1c3ec0e57ac2c39e7b90d3c8a30a9a5.js": "/ktb-frontend/precache-manifest.a1c3ec0e57ac2c39e7b90d3c8a30a9a5.js",
     "service-worker.js": "/ktb-frontend/service-worker.js",
     "static/css/main.4699c619.chunk.css.map": "/ktb-frontend/static/css/main.4699c619.chunk.css.map"
   }
