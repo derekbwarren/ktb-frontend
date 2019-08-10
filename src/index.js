@@ -12,7 +12,7 @@ const history = createBrowserHistory()
 
 document.title = 'KnowThyBoss'
 
-ReactDOM.render(<Router history={history}><App history={history} /></Router>, document.getElementById('root'))
+ReactDOM.render(<Router history={history} basename="/ktb-frontend"><App history={history} /></Router>, document.getElementById('root'))
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
