@@ -19,15 +19,16 @@ import {
   ListItemIcon,
   ListItemText,
   Hidden,
+  Menu,
+  MenuItem,
 } from '@material-ui/core'
 import {
   makeStyles,
   useTheme,
 } from '@material-ui/core/styles'
 import {
-  ChevronLeft, ChevronRight, Menu as MenuIcon, Inbox, Mail,
+  Menu as MenuIcon, AccountCircle,
 } from '@material-ui/icons'
-import clsx from 'clsx'
 import { navItems } from '../../constants'
 
 const DRAWER_WIDTH = 280
@@ -109,16 +110,30 @@ const SideDrawerV2 = ({
   children,
   history,
   location,
+  handleLoginToggle,
+  user,
   ...props
 }) => {
+  const isLoggedIn = user !== null
   const pathname = new URLSearchParams(location).get('pathname')
+  // eslint-disable-next-line react/prop-types
   const { container } = props
   const classes = useStyles()
   const theme = useTheme()
   const [mobileOpen, setMobileOpen] = React.useState(false)
+  const [anchorEl, setAnchorEl] = React.useState(null)
+  const open = Boolean(anchorEl)
+
+  navItems.find(item => item.text === 'Add New Manager').display = isLoggedIn
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
+  }
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const handleClose = () => {
+    setAnchorEl(null)
   }
 
   const drawer = (
@@ -187,7 +202,38 @@ const SideDrawerV2 = ({
           <Typography variant="h6" noWrap className={classes.title} style={{ visibility: 'hidden' }}>
             Responsive drawer
           </Typography>
-          <Button color="primary">Login</Button>
+          {!isLoggedIn && <Button color="primary" style={{ color: 'rgb(32, 122, 204)' }} onClick={handleLoginToggle}>Login</Button>}
+          {isLoggedIn && (
+            <div>
+              <IconButton
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="primary"
+                style={{ color: 'rgb(32, 122, 204)' }}
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={open}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleClose}>Logout</MenuItem>
+              </Menu>
+            </div>
+          )}
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">
@@ -234,11 +280,15 @@ SideDrawerV2.propTypes = {
   children: PropTypes.object.isRequired,
   history: PropTypes.object,
   location: PropTypes.object,
+  handleLoginToggle: PropTypes.func,
+  user: PropTypes.object,
 }
 
 SideDrawerV2.defaultProps = {
   history: null,
   location: null,
+  handleLoginToggle: null,
+  user: null,
 }
 
 export default withRouter(SideDrawerV2)
