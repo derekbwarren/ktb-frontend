@@ -2,7 +2,7 @@
 import React, { Component, Fragment } from 'react'
 import { Redirect, Route, Switch } from 'react-router'
 
-import { Managers, NewManager } from './containers'
+import { Managers, NewManager, ManagersV2 } from './containers'
 import { SideDrawer, SideDrawerV2 } from './components'
 
 require('dotenv').config()
@@ -32,7 +32,7 @@ class App extends Component {
               exact
               path="/managers"
               render={props => (
-                <Managers {...props} />
+                <ManagersV2 {...props} />
               )}
             />
             <Route
