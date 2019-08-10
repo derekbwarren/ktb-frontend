@@ -72,9 +72,13 @@ const useStyles = makeStyles(theme => ({
   ratingContainer: {
     display: 'flex',
     flexDirection: 'column',
+    width: 'max-content',
     [theme.breakpoints.down('sm')]: {
       // flexDirection: 'row',
       // alignItems: 'center',
+    },
+    '&:hover': {
+      cursor: 'default',
     },
   },
   worldClass: {
