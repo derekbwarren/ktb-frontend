@@ -13,6 +13,7 @@ import firebase from '../../firebase'
 
 import {
   AppBar,
+  Avatar,
   Button,
   CssBaseline,
   Drawer,
@@ -38,6 +39,7 @@ import {
 import { navItems } from '../../constants'
 
 const DRAWER_WIDTH = 280
+const defaultPerson = `${process.env.REACT_APP_BASENAME}assets/images/defaultPerson2.png`
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -212,7 +214,7 @@ const SideDrawerV2 = ({
             <MenuIcon color="primary" />
           </IconButton>
           <Typography variant="h6" noWrap className={classes.title} style={{ visibility: 'hidden' }}>
-            Responsive drawer
+            KnowThyBoss
           </Typography>
           {!isLoggedIn && <Button color="primary" style={{ color: 'rgb(32, 122, 204)' }} onClick={handleLoginToggle}>Login</Button>}
           {isLoggedIn && (
@@ -225,7 +227,8 @@ const SideDrawerV2 = ({
                 color="primary"
                 style={{ color: 'rgb(32, 122, 204)' }}
               >
-                <AccountCircle />
+                {/* <AccountCircle /> */}
+                <Avatar src={user.avatar ? user.avatar : defaultPerson} />
               </IconButton>
               <Menu
                 id="menu-appbar"

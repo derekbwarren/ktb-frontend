@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   },
   actions: {
     // marginTop: '24px',
-    padding: '16px 24px',
+    padding: '16px 24px 24px 24px',
   },
   submit: {
     backgroundColor: 'rgb(32, 122, 204)',
@@ -29,6 +29,10 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
+  },
+  title: {
+    textAlign: 'center',
+    paddingTop: '24px',
   },
 }))
 
@@ -47,32 +51,12 @@ const LoginModal = ({ handleClose, open }) => {
       maxWidth="xs"
       fullWidth
     >
-      <DialogTitle id="responsive-dialog-title">
+      <DialogTitle id="responsive-dialog-title" className={classes.title}>
         {'Login to Your Account'}
       </DialogTitle>
-      {/* <DialogContent>
-        <DialogContentText>
-          {'How likely is it that you would recommend this manager to a friend or colleague?'}
-        </DialogContentText>
-        <Slider
-          className={classes.slider}
-          defaultValue={5}
-          getAriaValueText={valuetext}
-          aria-labelledby="discrete-slider"
-          valueLabelDisplay="on"
-          step={1}
-          marks={marks}
-          min={0}
-          max={10}
-        />
-        <div className={classes.labels}>
-          <span>Very Unlikely</span>
-          <span>Very Likely</span>
-        </div>
-      </DialogContent> */}
       <DialogActions className={classes.actions}>
         <div className={classes.actionContainer}>
-          <GoogleLoginButton style={{ fontSize: '16px' }} />
+          <GoogleLoginButton style={{ fontSize: '16px', margin: '16px 5px' }} />
           <GithubLoginButton style={{ fontSize: '16px' }} />
         </div>
       </DialogActions>
@@ -83,12 +67,9 @@ const LoginModal = ({ handleClose, open }) => {
 LoginModal.propTypes = {
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  data: PropTypes.object,
 }
 
 LoginModal.defaultProps = {
-  data: {},
 }
 
 export default LoginModal
