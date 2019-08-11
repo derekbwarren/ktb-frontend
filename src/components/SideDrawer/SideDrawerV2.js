@@ -68,9 +68,9 @@ const useStyles = makeStyles(theme => ({
   drawerPaper: {
     width: DRAWER_WIDTH,
     backgroundColor: '#1389e4',
-    backgroundImage: `url(${process.env.REACT_APP_BASENAME}assets/images/crystals_bg.png)`,
-    backgroundSize: 'contain',
-    backgroundPosition: 'bottom',
+    backgroundImage: `url(${process.env.REACT_APP_BASENAME}assets/images/bg5.png)`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center bottom',
     backgroundRepeat: 'no-repeat',
   },
   content: {
@@ -80,13 +80,18 @@ const useStyles = makeStyles(theme => ({
   title: {
     flexGrow: 1,
   },
+  itemText: {
+    '& span': {
+      fontWeight: 500,
+    },
+  },
 }))
 
 // styles
 const Logo = styled(Typography).attrs({
   variant: 'h5',
 })`
-  @import url('https://fonts.googleapis.com/css?family=Exo:500i&display=swap');
+  @import url('https://fonts.googleapis.com/css?family=Exo:300i,500i,400i&display=swap');
   &&& {
     font-family: 'Exo', sans-serif;
     text-shadow: 1px 2px 4px rgba(0,0,0,0.2);
@@ -140,7 +145,7 @@ const SideDrawerV2 = ({
 
   const drawer = (
     <div>
-      <div className={classes.toolbar} style={{ backgroundColor: '#207acc' }} />
+      <div className={classes.toolbar} />
       {/* <Divider /> */}
       <div style={{
         textAlign: 'center',
@@ -152,9 +157,10 @@ const SideDrawerV2 = ({
       >
         <Logo style={{
           backgroundColor: '#1389e4',
+          fontWeight: 500,
           padding: '16px 0',
           // width: '210px',
-          margin: '-32px auto 0 auto',
+          margin: '-32px auto 24px auto',
           color: 'white',
           borderRadius: '4px',
           // visibility: mobileOpen ? '' : 'hidden',
@@ -178,7 +184,7 @@ const SideDrawerV2 = ({
                 }}
               >
                 <ListItemIcon style={{ color: '#fff' }}>{item.icon}</ListItemIcon>
-                <ListItemText style={{ color: '#fff' }} primary={item.text} />
+                <ListItemText className={classes.itemText} style={{ color: '#fff' }} primary={item.text} />
               </ListItem>
             )
           ))
