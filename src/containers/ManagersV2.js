@@ -1,4 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
+
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import {
   Button, Card, CardContent, Typography, TextField, Tooltip, Zoom, CardActions,
@@ -6,6 +8,28 @@ import {
 import { NetPromoterScore, RateManagerModal } from '../components'
 // import { SkipNext, SkipPrevious, PlayArrow } from '@material-ui/icons'
 import { managers as mockManagers } from '../mocks'
+import firebase from '../firebase'
+
+function useManagers() {
+  const [managers, setManagers] = useState([])
+
+  useEffect(() => {
+    const unsubscribe = firebase
+      .firestore()
+      .collection('managers')
+      .onSnapshot((snapshot) => {
+        const newManagers = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+        setManagers(newManagers);
+      })
+
+      return () => unsubscribe()
+  }, [])
+
+  return managers;
+}
 
 
 const useStyles = makeStyles(theme => ({
@@ -117,17 +141,18 @@ const LightTooltip = withStyles(theme => ({
   },
 }))(Tooltip)
 
-const ManagersV2 = () => {
+const hasUserAlreadyRated = (manager, user) => {
+    return !!(manager.nps && manager.nps.raters && manager.nps.raters.includes(user.uid))
+}
+
+const ManagersV2 = ({user}) => {
   const classes = useStyles()
   // const theme = useTheme()
-  const [managers, setManagers] = useState([])
+  // const [managers, setManagers] = useState([])
+  const managers = useManagers();
   const [filterText, setFilter] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
   const [currentManager, setCurrentManager] = useState({})
-
-  useEffect(() => {
-    setManagers(mockManagers)
-  }, [])
 
   const getRatingClass = (rating) => {
     if (rating > 75) { return 'worldClass' }
@@ -138,7 +163,7 @@ const ManagersV2 = () => {
   }
   const handleFilter = () => {
     // eslint-disable-next-line max-len
-    setManagers(managers.filter(manager => manager.firstName.includes(filterText) || manager.lastName.includes(filterText)))
+    // setManagers(managers.filter(manager => manager.firstName.includes(filterText) || manager.lastName.includes(filterText)))
   }
   const handleModelClose = () => {
     setModalOpen(false)
@@ -158,7 +183,7 @@ const ManagersV2 = () => {
         {
         managers.map((manager) => {
           const {
-            id, firstName, lastName, company, level, organization, rating,
+            id, firstName, lastName, company, level, organization, nps,
           } = manager
           return (
             <Card className={classes.card} key={`${lastName}-${id}`}>
@@ -184,8 +209,8 @@ const ManagersV2 = () => {
                 </div>
                 <LightTooltip TransitionComponent={Zoom} title={<NetPromoterScore />} placement="top" interactive>
                   <div className={classes.ratingContainer}>
-                    <Typography component="h5" variant="h5" className={classes[getRatingClass(rating)]}>
-                      {rating}
+                    <Typography component="h5" variant="h5" className={classes[getRatingClass(nps['nps'])]}>
+                      {nps['nps']}
                     </Typography>
                     <Typography variant="subtitle1" color="textSecondary">
                       Rating
@@ -193,9 +218,9 @@ const ManagersV2 = () => {
                   </div>
                 </LightTooltip>
               </CardContent>
-              <CardActions>
+              {!(user && hasUserAlreadyRated(manager, user)) && <CardActions>
                 <Button size="small" onClick={() => { setCurrentManager(manager); setModalOpen(true) }}>Rate Manager</Button>
-              </CardActions>
+              </CardActions>}
             </Card>
           )
         })
@@ -204,6 +229,10 @@ const ManagersV2 = () => {
       <RateManagerModal open={modalOpen} handleClose={handleModelClose} data={currentManager} />
     </Fragment>
   )
+}
+
+ManagersV2.propTypes = {
+  user: PropTypes.object,
 }
 
 export default ManagersV2

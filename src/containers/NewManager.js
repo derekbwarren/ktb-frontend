@@ -1,4 +1,6 @@
 import React, { Fragment, useState } from 'react'
+import PropTypes from 'prop-types'
+
 // import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import {
@@ -6,6 +8,7 @@ import {
 } from '@material-ui/core'
 
 import firebase from '../firebase';
+import updateNps from '../Utils/updateNps'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -77,9 +80,11 @@ const DEFAULT_VALUES = {
   company: '',
   level: '',
   organization: '',
+  rating: '',
+  nps: {}
 }
 
-const NewManager = () => {
+const NewManager = ({user}) => {
   const classes = useStyles()
   const [values, setValues] = React.useState(DEFAULT_VALUES)
   const [successFullyAdded, setSuccessfullyAdded] = useState(false);
@@ -92,6 +97,7 @@ const marks = [...Array(11).keys()].reverse().map(key => ({ value: key, label: `
   }
   const handleSubmit = (e) => {
     e.preventDefault()
+    values.nps = updateNps(values.rating, null, user.uid)
     firebase
       .firestore()
       .collection('managers')
@@ -253,4 +259,7 @@ const marks = [...Array(11).keys()].reverse().map(key => ({ value: key, label: `
   )
 }
 
+NewManager.propTypes = {
+  user: PropTypes.object,
+}
 export default NewManager

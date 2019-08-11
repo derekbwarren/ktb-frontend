@@ -1,9 +1,12 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import {
   Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, useMediaQuery, Slider, Typography,
 } from '@material-ui/core'
 import { useTheme, makeStyles } from '@material-ui/core/styles'
+import updateNps from '../../Utils/updateNps'
+import firebase from '../../firebase';
+
 
 const useStyles = makeStyles(theme => ({
   labels: {
@@ -30,15 +33,30 @@ const useStyles = makeStyles(theme => ({
 
 const marks = [...Array(11).keys()].map(key => ({ value: key, label: `${key}` }))
 
+
+
+
 const RateManagerModal = ({ handleClose, open, data }) => {
   const classes = useStyles()
   const theme = useTheme()
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'))
   const {
-    id, firstName, lastName, company, level, organization,
+    id, firstName, lastName, company, level, organization, nps
   } = data
-
+  const [manager, setNewManager] = useState(data)
+  const [npsState, setNpsState] = useState(nps)
+  const [likelyHood, setLikelyhood] = useState('')
   const valuetext = value => `${value}`
+
+  const handleChange = field => (e) => {
+    console.log(e)
+    const { value } = e.target
+    setLikelyhood(value)
+  }
+
+  function updateFB() {
+    console.log("somethign"+ likelyHood);
+  }
 
   return (
     <Dialog
@@ -71,6 +89,7 @@ const RateManagerModal = ({ handleClose, open, data }) => {
           getAriaValueText={valuetext}
           aria-labelledby="discrete-slider"
           valueLabelDisplay="on"
+          onChange={handleChange()}
           step={1}
           marks={marks}
           min={0}
@@ -85,7 +104,7 @@ const RateManagerModal = ({ handleClose, open, data }) => {
         <Button onClick={handleClose} color="default">
             Cancel
         </Button>
-        <Button className={classes.submit} onClick={handleClose} variant="contained" color="primary" autoFocus>
+        <Button className={classes.submit} onClick={() => {updateFB(); handleClose()}} variant="contained" color="primary" autoFocus>
             Submit
         </Button>
       </DialogActions>

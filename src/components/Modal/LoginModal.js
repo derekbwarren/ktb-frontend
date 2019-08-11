@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-const LoginModal = ({ handleClose, open }) => {
+const LoginModal = ({ handleClose, open, handleGoogleLogin }) => {
   const classes = useStyles()
   const theme = useTheme()
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'))
@@ -56,8 +56,8 @@ const LoginModal = ({ handleClose, open }) => {
       </DialogTitle>
       <DialogActions className={classes.actions}>
         <div className={classes.actionContainer}>
-          <GoogleLoginButton style={{ fontSize: '16px', margin: '16px 5px' }} />
-          <GithubLoginButton style={{ fontSize: '16px' }} />
+          <GoogleLoginButton onClick={handleGoogleLogin} style={{ fontSize: '16px', margin: '16px 5px' }} />
+          {/* <GithubLoginButton style={{ fontSize: '16px' }} /> */}
         </div>
       </DialogActions>
     </Dialog>
@@ -67,6 +67,7 @@ const LoginModal = ({ handleClose, open }) => {
 LoginModal.propTypes = {
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
+  handleGoogleLogin: PropTypes.func.isRequired,
 }
 
 LoginModal.defaultProps = {

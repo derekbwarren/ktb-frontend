@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import Login from '../Auth/Auth'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import 'firebase/auth';
 
@@ -87,13 +86,13 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
   },
 }))
-const uiConfig = {
-  signInFlow: 'popup',
-  signInSuccessUrl: '/',
-  signInOptions: [
-    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-  ]
-}
+// const uiConfig = {
+//   signInFlow: 'popup',
+//   signInSuccessUrl: '/',
+//   signInOptions: [
+//     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+//   ]
+// }
 // styles
 const Logo = styled(Typography).attrs({
   variant: 'h5',
@@ -125,6 +124,7 @@ const SideDrawerV2 = ({
   history,
   location,
   handleLoginToggle,
+  handleLogout,
   user,
   ...props
 }) => {
@@ -219,6 +219,9 @@ const SideDrawerV2 = ({
           {!isLoggedIn && <Button color="primary" style={{ color: 'rgb(32, 122, 204)' }} onClick={handleLoginToggle}>Login</Button>}
           {isLoggedIn && (
             <div>
+                            {/* style me please */}
+
+              {user.displayName && <span>{user.displayName}</span>}
               <IconButton
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
@@ -228,7 +231,7 @@ const SideDrawerV2 = ({
                 style={{ color: 'rgb(32, 122, 204)' }}
               >
                 {/* <AccountCircle /> */}
-                <Avatar src={user.avatar ? user.avatar : defaultPerson} />
+                <Avatar src={user.photoURL ? user.photoURL : defaultPerson} />
               </IconButton>
               <Menu
                 id="menu-appbar"
@@ -245,7 +248,7 @@ const SideDrawerV2 = ({
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Logout</MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </div>
           )}
@@ -296,6 +299,7 @@ SideDrawerV2.propTypes = {
   history: PropTypes.object,
   location: PropTypes.object,
   handleLoginToggle: PropTypes.func,
+  handleLogout: PropTypes.func.isRequired,
   user: PropTypes.object,
 }
 
