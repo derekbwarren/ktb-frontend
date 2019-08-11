@@ -32,7 +32,17 @@ const useStyles = makeStyles(theme => ({
   },
   card: {
     minWidth: 275,
+    maxWidth: 275,
     margin: '0 16px 16px 0',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  cardContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    flexGrow: 1,
   },
   title: {
     fontSize: 14,
@@ -152,23 +162,25 @@ const ManagersV2 = () => {
           } = manager
           return (
             <Card className={classes.card} key={`${lastName}-${id}`}>
-              <CardContent>
-                <Typography className={classes.title} color="textSecondary" gutterBottom>
-                  {company}
-                </Typography>
-                <Typography variant="h5" component="h2">
-                  {firstName}
-                  {' '}
-                  {lastName}
-                </Typography>
-                <div className={classes.pos}>
-                  <Typography color="textSecondary">
-                    {level}
-                    {' '}
-                    &mdash;
-                    {' '}
-                    {organization}
+              <CardContent className={classes.cardContent}>
+                <div>
+                  <Typography className={classes.title} color="textSecondary" gutterBottom>
+                    {company}
                   </Typography>
+                  <Typography variant="h5" component="h2">
+                    {firstName}
+                    {' '}
+                    {lastName}
+                  </Typography>
+                  <div className={classes.pos}>
+                    <Typography color="textSecondary">
+                      {level}
+                      {' '}
+                    &mdash;
+                      {' '}
+                      {organization}
+                    </Typography>
+                  </div>
                 </div>
                 <LightTooltip TransitionComponent={Zoom} title={<NetPromoterScore />} placement="top" interactive>
                   <div className={classes.ratingContainer}>

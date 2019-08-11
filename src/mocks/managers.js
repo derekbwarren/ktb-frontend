@@ -10,8 +10,8 @@ const managers = [
   },
   {
     id: 2,
-    firstName: 'Stan',
-    lastName: 'Lee',
+    firstName: 'Stan Stan Stan Stan',
+    lastName: 'Lee Lee',
     company: 'Capital One',
     level: 'Director',
     organization: 'Card',
