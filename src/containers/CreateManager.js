@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 // import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import {
@@ -7,6 +7,7 @@ import {
 
 import firebase from '../firebase';
 
+
 const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
@@ -14,38 +15,10 @@ const useStyles = makeStyles(theme => ({
     width: '60%',
     margin: '0 auto',
     justifyContent: 'center',
-    [theme.breakpoints.down('sm')]: {
-      width: '100%',
-    },
   },
   fieldContainer: {
     marginTop: '16px',
     marginBottom: '16px',
-  },
-  fieldFlex: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-    [theme.breakpoints.down('sm')]: {
-      flexDirection: 'column',
-    },
-  },
-  firstName: {
-    margin: '16px 8px 8px 8px',
-    width: '50%',
-    [theme.breakpoints.down('sm')]: {
-      width: 'auto',
-      margin: '16px 8px 8px 8px',
-    },
-  },
-  lastName: {
-    margin: '16px 8px 8px 8px',
-    width: '50%',
-    [theme.breakpoints.down('sm')]: {
-      width: 'auto',
-      margin: 8,
-    },
   },
   textField: {
     marginLeft: theme.spacing(1),
@@ -62,71 +35,52 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1),
   },
 }))
-const DEFAULT_VALUES = {
-  firstName: '',
-  lastName: '',
-  company: '',
-  level: '',
-  organization: '',
-}
 
-const NewManager = () => {
-  const classes = useStyles()
-  const [values, setValues] = React.useState(DEFAULT_VALUES)
-  const [successFullyAdded, setSuccessfullyAdded] = useState(false);
-
-  const handleChange = field => (e) => {
-    const { value } = e.target
-    setValues({ ...values, [field]: value })
-  }
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    firebase
-      .firestore()
-      .collection('managers')
-      .add(values)
-      .then(() => {
-        setValues(DEFAULT_VALUES)
-        setSuccessfullyAdded(true);
-        setTimeout(() => {
-          setSuccessfullyAdded(false);
-        }, 3000);
-      })
+class CreateManager extends React.Component {
+  constructor() {
+    super();
+    this.ref = firebase.firestore().collection('managers');
+    this.state = {
+      firstName: '',
+      lastName: '',
+      company: '',
+      level: '',
+      organization: '',
+      rating: null,
+    }
   }
 
-  return (
+  onChange = (e) => {
+    const state = this.state
+    state[e.target.name] = e.target.value;
+    this.setState(state);
+  }
+
+  onSubmit = (e) => {
+    e.preventDefault();
+    console.log('write some validation funciton here');
+
+  }
+
+
+  render() {
     <div>
       <Typography className={classes.margin} variant="h5" style={{ textAlign: 'center' }}>
         Add New Manager
       </Typography>
       <form className={classes.container} noValidate={false} autoComplete="off" onSubmit={handleSubmit}>
-        {successFullyAdded && <span className={classes.fieldFlex}>Successfully Added!</span>}
-        <div className={classes.fieldFlex}>
-          <TextField
-            id="manager-first-name"
-            label="First Name"
-            className={classes.firstName}
-            fullWidth
-            margin="normal"
-            onChange={handleChange('firstName')}
-            value={values.firstName}
-            variant="outlined"
-            helperText="Required"
-            required
-          />
-          <TextField
-            id="manager-last-name"
-            label="Last Name"
-            className={classes.lastName}
-            fullWidth
-            margin="normal"
-            onChange={handleChange('lastName')}
-            value={values.lastName}
-            variant="outlined"
-            helperText="Required"
-            required
-          />
-        </div>
+        <TextField
+          id="manager-name"
+          label="Name"
+          style={{ margin: '16px 8px 8px 8px' }}
+          fullWidth
+          margin="normal"
+          onChange={handleChange('name')}
+          value={values.name}
+          variant="outlined"
+          helperText="Required"
+          required
+        />
         <TextField
           id="manager-company"
           select
@@ -190,7 +144,28 @@ const NewManager = () => {
         </Button>
       </form>
     </div>
+  }
+}
+
+const NewManager = () => {
+  const classes = useStyles()
+  const [values, setValues] = React.useState({
+    name: '',
+    company: '',
+    level: '',
+    organization: '',
+  })
+  const handleChange = field => (e) => {
+
+  }
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log('submit with values', values)
+  }
+
+  return (
+    <div></div>
   )
 }
 
-export default NewManager
+export default CreateManager

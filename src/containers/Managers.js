@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react'
+import React, { Component, Fragment, useState, useEffect } from 'react'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import {
   Button, Card, CardContent, Typography, TextField, Tooltip, Zoom,
@@ -6,6 +6,28 @@ import {
 import { NetPromoterScore } from '../components'
 // import { SkipNext, SkipPrevious, PlayArrow } from '@material-ui/icons'
 import { managers as mockManagers } from '../mocks'
+import firebase from '../firebase'
+
+function useManagers() {
+  const [managers, setManagers] = useState([])
+
+  useEffect(() => {
+    const unsubscribe = firebase
+      .firestore()
+      .collection('managers')
+      .onSnapshot((snapshot) => {
+        const newManagers = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+        setManagers(newManagers);
+      })
+
+      return () => unsubscribe()
+  }, [])
+
+  return managers;
+}
 
 
 const useStyles = makeStyles(theme => ({
@@ -101,15 +123,14 @@ const LightTooltip = withStyles(theme => ({
   },
 }))(Tooltip)
 
-const Managers = () => {
+
+const ManagerList = () => {
   const classes = useStyles()
   // const theme = useTheme()
-  const [managers, setManagers] = useState([])
-  const [filterText, setFilter] = useState('')
+  const managers = useManagers();
 
-  useEffect(() => {
-    setManagers(mockManagers)
-  }, [])
+  const [filterText, setFilter] = useState('')
+  const [isLoading, setLoading] = useState(true)
 
   const getRatingClass = (rating) => {
     if (rating > 75) { return 'worldClass' }
@@ -120,7 +141,7 @@ const Managers = () => {
   }
   const handleFilter = () => {
     // eslint-disable-next-line max-len
-    setManagers(managers.filter(manager => manager.firstName.includes(filterText) || manager.lastName.includes(filterText)))
+    // setManagers(managers.filter(manager => manager.firstName.includes(filterText) || manager.lastName.includes(filterText)))
   }
 
   return (
@@ -180,4 +201,4 @@ const Managers = () => {
   )
 }
 
-export default Managers
+export default ManagerList;

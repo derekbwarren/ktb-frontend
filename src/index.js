@@ -10,7 +10,7 @@ import * as serviceWorker from './serviceWorker'
 
 const history = createBrowserHistory()
 
-document.title = 'KnowThyBoss'
+document.title = 'Know Thy Boss'
 
 ReactDOM.render(<Router history={history} basename="/"><App history={history} /></Router>, document.getElementById('root'))
 

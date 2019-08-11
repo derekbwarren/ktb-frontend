@@ -5,6 +5,12 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
+import Login from '../Auth/Auth'
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import 'firebase/auth';
+
+import firebase from '../../firebase'
+
 import {
   AppBar,
   Button,
@@ -78,7 +84,13 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
   },
 }))
-
+const uiConfig = {
+  signInFlow: 'popup',
+  signInSuccessUrl: '/',
+  signInOptions: [
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+  ]
+}
 // styles
 const Logo = styled(Typography).attrs({
   variant: 'h5',
@@ -187,7 +199,7 @@ const SideDrawerV2 = ({
           <Typography variant="h6" noWrap className={classes.title} style={{ visibility: 'hidden' }}>
             Responsive drawer
           </Typography>
-          <Button color="primary">Login</Button>
+          <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">

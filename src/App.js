@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { Redirect, Route, Switch } from 'react-router'
 
-import { Managers, NewManager } from './containers'
+import { ManagerList, NewManager } from './containers'
 import { SideDrawer, SideDrawerV2 } from './components'
 
 class App extends Component {
@@ -28,7 +28,7 @@ class App extends Component {
               exact
               path="/managers"
               render={props => (
-                <Managers {...props} />
+                <ManagerList {...props} />
               )}
             />
             <Route
