@@ -48,6 +48,10 @@ jobs:
             git remote rm origin
             git remote add origin https://derekbwarren:${GITHUB_TOKEN}@github.com/derekbwarren/ktb-frontend.git
       
+      # Add ENV
+      - run:
+          name: Add ENV
+          command: echo -e 'REACT_APP_BASENAME="/ktb-frontend/"' > .env
       # Build Code
       - run:
           name: Build

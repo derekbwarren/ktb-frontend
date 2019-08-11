@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { Fragment, useState } from 'react'
 // import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import {
@@ -61,7 +61,16 @@ const useStyles = makeStyles(theme => ({
   margin: {
     margin: theme.spacing(1),
   },
+  slider: {
+    paddingTop: '48px',
+    color: 'rgb(32, 122, 204)',
+    marginBottom: 0,
+  },
+  lastField: {
+    margin: '8px 8px 16px 8px',
+  },
 }))
+
 const DEFAULT_VALUES = {
   firstName: '',
   lastName: '',
@@ -74,6 +83,8 @@ const NewManager = () => {
   const classes = useStyles()
   const [values, setValues] = React.useState(DEFAULT_VALUES)
   const [successFullyAdded, setSuccessfullyAdded] = useState(false);
+
+const marks = [...Array(11).keys()].reverse().map(key => ({ value: key, label: `${key}` }))
 
   const handleChange = field => (e) => {
     const { value } = e.target
@@ -165,7 +176,7 @@ const NewManager = () => {
         <TextField
           id="manager-organization"
           label="Line of Business"
-          style={{ margin: '8px 8px 16px 8px' }}
+          style={{ margin: 8 }}
           fullWidth
           margin="normal"
           onChange={handleChange('organization')}
@@ -174,6 +185,55 @@ const NewManager = () => {
           helperText="Required"
           required
         />
+        <Typography variant="subtitle1" style={{ margin: '16px 8px' }}>How likely is it that you would recommend this manager to a friend or colleague?</Typography>
+        <TextField
+          id="manager-rating"
+          select
+          fullWidth
+          label="Manger Rating"
+          className={classes.textField}
+          value={values.rating}
+          onChange={handleChange('rating')}
+          SelectProps={{
+            MenuProps: {
+              className: classes.menu,
+            },
+          }}
+          margin="normal"
+          style={{ margin: '8px 8px 16px 8px' }}
+          variant="outlined"
+          helperText="Optional"
+          required={false}
+        >
+
+          {
+            marks.map(mark => (
+              <MenuItem value={mark.value} key={mark.label}>
+                {mark.label}
+                {
+                  mark.label === '10'
+                    ? (
+                      <Fragment>
+                        {' '}
+                        &mdash; Very Likely
+                      </Fragment>
+                    )
+                    : null
+                }
+                {
+                  mark.label === '0'
+                    ? (
+                      <Fragment>
+                        {' '}
+                        &mdash; Very Unlikely
+                      </Fragment>
+                    )
+                    : null
+                }
+              </MenuItem>
+            ))
+          }
+        </TextField>
 
         <Button
           variant="contained"
