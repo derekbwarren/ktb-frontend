@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import {
-  Button, Card, CardContent, Typography, TextField, Tooltip, Zoom, CardActions,
+  Button, Card, CardContent, Typography, TextField, Tooltip, Zoom, CardActions, Chip,
 } from '@material-ui/core'
 import { NetPromoterScore, RateManagerModal } from '../components'
 // import { SkipNext, SkipPrevious, PlayArrow } from '@material-ui/icons'
@@ -49,7 +49,6 @@ const useStyles = makeStyles(theme => ({
     flexWrap: 'wrap',
     marginLeft: '4em',
     marginRight: '4em',
-    justifyContent: 'space-evenly',
     [theme.breakpoints.down('sm')]: {
       marginLeft: '0',
       marginRight: '0',
@@ -122,8 +121,9 @@ const useStyles = makeStyles(theme => ({
   },
   ratingContainer: {
     display: 'flex',
-    flexDirection: 'column',
-    width: 'max-content',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     [theme.breakpoints.down('sm')]: {
       // flexDirection: 'row',
       // alignItems: 'center',
@@ -183,6 +183,14 @@ const ManagersV2 = ({ user, handleLoginToggle, location }) => {
     if (rating > 0) { return 'good' }
     if (rating < 0) { return 'bad' }
     return 'default'
+  }
+
+  const getRatingText = (rating) => {
+    if (rating > 75) { return 'World Class' }
+    if (rating > 50) { return ' Excellent' }
+    if (rating > 0) { return 'Good' }
+    if (rating === 0) { return 'Needs Improvement' }
+    if (rating < 0) { return 'Avoid' }
   }
   const handleFilter = () => {
     // eslint-disable-next-line max-len
@@ -266,16 +274,14 @@ const ManagersV2 = ({ user, handleLoginToggle, location }) => {
                 </div>
                 <LightTooltip TransitionComponent={Zoom} title={<NetPromoterScore />} placement="top" interactive>
                   <div className={classes.ratingContainer}>
-                    <Typography component="h5" variant="h5" className={classes[getRatingClass(nps.nps)]}>
+                    <Typography component="h5" variant="h5">
                       {
                         nps.respondents > 0
-                          ? nps.nps
-                          : <Typography variant="subtitle1" component="span" color="textSecondary">Not Yet Rated</Typography>
+                          ? `${nps.nps}`
+                          : <Typography component="span" color="textSecondary">Not Yet Rated</Typography>
                         }
                     </Typography>
-                    <Typography variant="subtitle1" color="textSecondary">
-                      Rating
-                    </Typography>
+                    <Chip variant="outlined" size="small" label={getRatingText(nps.nps)} className={classes[getRatingClass(nps.nps)]} />
                   </div>
                 </LightTooltip>
               </CardContent>
