@@ -3,7 +3,7 @@ import React, { Component, Fragment } from 'react'
 import { Redirect, Route, Switch } from 'react-router'
 import { ManagerList, NewManager, ManagersV2 } from './containers'
 import { SideDrawerV2, LoginModal } from './components'
-import firebase, {auth, provider} from './firebase/Firebase'
+import firebase, { auth, provider } from './firebase/Firebase'
 
 require('dotenv').config()
 
@@ -25,9 +25,9 @@ class App extends Component {
   componentDidMount() {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        this.setState({ user });
-      } 
-   })
+        this.setState({ user })
+      }
+    })
   }
 
   handleLoginToggle() {
@@ -38,34 +38,40 @@ class App extends Component {
   }
 
   handleLoginWithGoogle() {
-    auth.signInWithPopup(provider) 
-    .then((result) => {
-      const user = result.user;
-      this.setState({
-        user: user,
-        loginOpen: false,
-      });
-    });
+    auth.signInWithPopup(provider)
+      .then((result) => {
+        const { user } = result
+        this.setState({
+          user,
+          loginOpen: false,
+        })
+      })
   }
 
   handleLogout() {
     auth.signOut()
-    .then(() => {
-      this.setState({
-        user: null
-      });
-    });
+      .then(() => {
+        this.setState({
+          user: null,
+        })
+      })
   }
 
-  handleChange(e) {
+  // handleChange(e) {
 
-  }
+  // }
+
   render() {
     const { location } = this.props
     const { loginOpen } = this.state
     return (
       <Fragment>
-        <SideDrawerV2 {...this.props} {...this.state} handleLoginToggle={this.handleLoginToggle} handleLogout={this.handleLogout}>
+        <SideDrawerV2
+          {...this.props}
+          {...this.state}
+          handleLoginToggle={this.handleLoginToggle}
+          handleLogout={this.handleLogout}
+        >
           <Switch location={location}>
             <Route
               exact
@@ -92,7 +98,11 @@ class App extends Component {
             />
           </Switch>
         </SideDrawerV2>
-        <LoginModal open={loginOpen} handleClose={this.handleLoginToggle} handleGoogleLogin={this.handleLoginWithGoogle} />
+        <LoginModal
+          open={loginOpen}
+          handleClose={this.handleLoginToggle}
+          handleGoogleLogin={this.handleLoginWithGoogle}
+        />
       </Fragment>
     )
   }
