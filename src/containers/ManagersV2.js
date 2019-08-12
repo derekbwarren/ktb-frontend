@@ -10,25 +10,36 @@ import { NetPromoterScore, RateManagerModal } from '../components'
 import { managers as mockManagers } from '../mocks'
 import firebase from '../firebase'
 
-function useManagers() {
+const SORT_OPTIONS = {
+  TIME_ASC: { column: 'time_seconds', direction: 'asc' },
+  TIME_DESC: { column: 'time_seconds', direction: 'desc' },
+
+  NAME_ASC: { column: 'firstName', direction: 'asc' },
+  NAME_DESC: { column: 'firstName', direciton: 'desc' },
+
+  NPS_ASC: { column: 'nps.nps', direction: 'asc' },
+  NPS_DESC: { column: 'nps.nps', direction: 'desc' },
+}
+function useManagers(sortBy = 'NAME_ASC') {
   const [managers, setManagers] = useState([])
 
   useEffect(() => {
     const unsubscribe = firebase
       .firestore()
       .collection('managers')
+      .orderBy(SORT_OPTIONS[sortBy].column, SORT_OPTIONS[sortBy].direction)
       .onSnapshot((snapshot) => {
-        const newManagers = snapshot.docs.map((doc) => ({
+        const newManagers = snapshot.docs.map(doc => ({
           id: doc.id,
-          ...doc.data()
+          ...doc.data(),
         }))
-        setManagers(newManagers);
+        setManagers(newManagers)
       })
 
-      return () => unsubscribe()
-  }, [])
+    return () => unsubscribe()
+  }, [sortBy])
 
-  return managers;
+  return managers
 }
 
 
@@ -39,10 +50,17 @@ const useStyles = makeStyles(theme => ({
     flexWrap: 'wrap',
     marginLeft: '4em',
     marginRight: '4em',
+    justifyContent: 'space-evenly',
     [theme.breakpoints.down('sm')]: {
       marginLeft: '0',
       marginRight: '0',
     },
+  },
+  buttonContainer: {
+    margin: '0 auto',
+    flexDirection: 'row',
+    textAlign: 'center',
+    padding: '1em',
   },
   textField: {
     marginTop: '0',
@@ -141,18 +159,18 @@ const LightTooltip = withStyles(theme => ({
   },
 }))(Tooltip)
 
-const hasUserAlreadyRated = (manager, user) => {
-    return !!(manager.nps && manager.nps.raters && manager.nps.raters.includes(user.uid))
-}
+const hasUserAlreadyRated = (manager, user) => !!(manager.nps && manager.nps.raters && manager.nps.raters.includes(user.uid))
 
-const ManagersV2 = ({user}) => {
+const ManagersV2 = ({ user }) => {
   const classes = useStyles()
   // const theme = useTheme()
   // const [managers, setManagers] = useState([])
-  const managers = useManagers();
-  const [filterText, setFilter] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
   const [currentManager, setCurrentManager] = useState({})
+
+  const [sortBy, setSortBy] = useState('NAME_ASC')
+  const managers = useManagers(sortBy)
+
 
   const getRatingClass = (rating) => {
     if (rating > 75) { return 'worldClass' }
@@ -169,16 +187,50 @@ const ManagersV2 = ({user}) => {
     setModalOpen(false)
   }
 
+  const handleBestManagers = () => {
+    setSortBy('NPS_ASC')
+  }
+
+  const handleWorstManagers = () => {
+    setSortBy('NPS_DESC')
+  }
+
+  const handleAllManagers = () => {
+    setSortBy('NAME_ASC')
+  }
+
   return (
     <Fragment>
-      <TextField
+      <div className={classes.buttonContainer}>
+        <Button
+          id="ascending-manager-name"
+          onClick={handleAllManagers}
+        >
+          All Managers
+        </Button>
+        <Button
+          id="ascending-managers-nps"
+          onClick={handleWorstManagers}
+          color="primary"
+        >
+            Recommended
+        </Button>
+        <Button
+          id="descending-managers-nps"
+          onClick={handleBestManagers}
+          color="secondary"
+        >
+            Not Recommended
+        </Button>
+      </div>
+      {/* <TextField
         id="filter-managers"
         label="Filter Managers"
         type="search"
         className={classes.textField}
         value={filterText}
         onChange={(e) => { setFilter(e.target.value); handleFilter() }}
-      />
+      /> */}
       <div className={classes.container}>
         {
         managers.map((manager) => {
@@ -209,8 +261,8 @@ const ManagersV2 = ({user}) => {
                 </div>
                 <LightTooltip TransitionComponent={Zoom} title={<NetPromoterScore />} placement="top" interactive>
                   <div className={classes.ratingContainer}>
-                    <Typography component="h5" variant="h5" className={classes[getRatingClass(nps['nps'])]}>
-                      {nps['nps']}
+                    <Typography component="h5" variant="h5" className={classes[getRatingClass(nps.nps)]}>
+                      {nps.nps}
                     </Typography>
                     <Typography variant="subtitle1" color="textSecondary">
                       Rating
@@ -218,9 +270,11 @@ const ManagersV2 = ({user}) => {
                   </div>
                 </LightTooltip>
               </CardContent>
-              {!(user && hasUserAlreadyRated(manager, user)) && <CardActions>
+              {!(user && hasUserAlreadyRated(manager, user)) && (
+              <CardActions>
                 <Button size="small" onClick={() => { setCurrentManager(manager); setModalOpen(true) }}>Rate Manager</Button>
-              </CardActions>}
+              </CardActions>
+              )}
             </Card>
           )
         })

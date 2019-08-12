@@ -61,6 +61,7 @@ const RateManagerModal = ({ handleClose, open, data, user }) => {
           console.log(error);
         })
     }
+
   }
 
   return (
