@@ -80,7 +80,7 @@ const DEFAULT_VALUES = {
   company: '',
   level: '',
   organization: '',
-  rating: '',
+  rating: -1,
   nps: {}
 }
 
