@@ -147,6 +147,9 @@ const useStyles = makeStyles(theme => ({
   default: {
     color: 'inherit',
   },
+  pulse: {
+    animation: 'shadow-pulse 1s 6',
+  },
 }))
 
 const LightTooltip = withStyles(theme => ({
@@ -161,11 +164,12 @@ const LightTooltip = withStyles(theme => ({
 // eslint-disable-next-line max-len
 const hasUserAlreadyRated = (manager, user) => !!(manager.nps && manager.nps.raters && manager.nps.raters.includes(user.uid))
 
-const ManagersV2 = ({ user, handleLoginToggle }) => {
+const ManagersV2 = ({ user, handleLoginToggle, location }) => {
+  const { state } = location
+  console.log('newManagerId', state && state.newManagerId)
+  const newManagerId = state && state.newManagerId
   const isLoggedIn = user !== null
   const classes = useStyles()
-  // const theme = useTheme()
-  // const [managers, setManagers] = useState([])
   const [modalOpen, setModalOpen] = useState(false)
   const [currentManager, setCurrentManager] = useState({})
 
@@ -239,7 +243,7 @@ const ManagersV2 = ({ user, handleLoginToggle }) => {
             id, firstName, lastName, company, level, organization, nps,
           } = manager
           return (
-            <Card className={classes.card} key={`${lastName}-${id}`}>
+            <Card className={`${classes.card} ${newManagerId === id ? 'new-manager-pulse' : ''}`} key={`${lastName}-${id}`}>
               <CardContent className={classes.cardContent}>
                 <div>
                   <Typography className={classes.title} color="textSecondary" gutterBottom>

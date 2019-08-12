@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { Component, Fragment } from 'react'
 import { Redirect, Route, Switch } from 'react-router'
+import { SnackbarProvider } from 'notistack'
 import { ManagerList, NewManager, ManagersV2 } from './containers'
 import { SideDrawerV2, LoginModal } from './components'
 import firebase, { auth, provider } from './firebase/Firebase'
@@ -66,43 +67,45 @@ class App extends Component {
     const { loginOpen } = this.state
     return (
       <Fragment>
-        <SideDrawerV2
-          {...this.props}
-          {...this.state}
-          handleLoginToggle={this.handleLoginToggle}
-          handleLogout={this.handleLogout}
-        >
-          <Switch location={location}>
-            <Route
-              exact
-              path="/"
-              render={() => (
-                // <Home {...props} />
-                <Redirect push to="/managers" />
-              )}
-            />
-            <Route
-              exact
-              path="/managers"
-              render={props => (
-                // <ManagerList {...props} />
-                <ManagersV2 {...props} {...this.state} handleLoginToggle={this.handleLoginToggle} />
-              )}
-            />
-            <Route
-              exact
-              path="/managers/new"
-              render={props => (
-                <NewManager {...props} {...this.state} />
-              )}
-            />
-          </Switch>
-        </SideDrawerV2>
-        <LoginModal
-          open={loginOpen}
-          handleClose={this.handleLoginToggle}
-          handleGoogleLogin={this.handleLoginWithGoogle}
-        />
+        <SnackbarProvider maxSnack={3}>
+          <SideDrawerV2
+            {...this.props}
+            {...this.state}
+            handleLoginToggle={this.handleLoginToggle}
+            handleLogout={this.handleLogout}
+          >
+            <Switch location={location}>
+              <Route
+                exact
+                path="/"
+                render={() => (
+                  // <Home {...props} />
+                  <Redirect push to="/managers" />
+                )}
+              />
+              <Route
+                exact
+                path="/managers"
+                render={props => (
+                  // <ManagerList {...props} />
+                  <ManagersV2 {...props} {...this.state} handleLoginToggle={this.handleLoginToggle} />
+                )}
+              />
+              <Route
+                exact
+                path="/managers/new"
+                render={props => (
+                  <NewManager {...props} {...this.state} />
+                )}
+              />
+            </Switch>
+          </SideDrawerV2>
+          <LoginModal
+            open={loginOpen}
+            handleClose={this.handleLoginToggle}
+            handleGoogleLogin={this.handleLoginWithGoogle}
+          />
+        </SnackbarProvider>
       </Fragment>
     )
   }
