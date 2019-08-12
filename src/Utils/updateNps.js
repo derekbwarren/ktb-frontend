@@ -18,16 +18,22 @@ const DEFAULT_NPS = {
 }
 
 const updateNps = (likelyHood, npsObj, userId) => {
-    const npsType = calculateNpsType(likelyHood)
-    if(!npsObj) npsObj = DEFAULT_NPS;
-    if(npsType) {
-        npsObj[npsType]++;
-        npsObj['respondents']++;
+    //new Rater
+    if(likelyHood === -1 && npsObj == null) {
+        npsObj = DEFAULT_NPS;
     }
+    else {
+        const npsType = calculateNpsType(likelyHood)
+        if(!npsObj) npsObj = DEFAULT_NPS;
+        if(npsType != null) {
+            npsObj[npsType]++;
+            npsObj['respondents']++;
+        }
 
-    npsObj['nps'] = ((npsObj['promoters'] - npsObj['detractors'])/npsObj['respondents'])*100;
+        npsObj['nps'] = Math.round(((npsObj['promoters'] - npsObj['detractors'])/npsObj['respondents'])*100);
 
-    npsObj['raters'].push(userId)
+        npsObj['raters'].push(userId)
+    }
 
     return npsObj;
 }
