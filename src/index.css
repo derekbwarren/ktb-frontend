@@ -14,6 +14,7 @@ code {
 
 .new-manager-pulse {
   animation: shadowPulse 1s 10;
+  z-index: 10;
 }
 
 @keyframes shadowPulse
