@@ -226,7 +226,7 @@ const ManagersV2 = ({user}) => {
         })
       }
       </div>
-      <RateManagerModal open={modalOpen} handleClose={handleModelClose} data={currentManager} />
+      <RateManagerModal open={modalOpen} handleClose={handleModelClose} data={currentManager} user={user} />
     </Fragment>
   )
 }

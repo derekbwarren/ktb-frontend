@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
 
 const marks = [...Array(11).keys()].map(key => ({ value: key, label: `${key}` }))
 
-const RateManagerModal = ({ handleClose, open, data }) => {
+const RateManagerModal = ({ handleClose, open, data, user }) => {
   const classes = useStyles()
   const theme = useTheme()
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'))
@@ -46,14 +46,21 @@ const RateManagerModal = ({ handleClose, open, data }) => {
   const valuetext = value => `${value}`
 
   const handleChange = field => (e, value) => {
-    console.log(e)
-    // const { value } = e.target
-    console.log('value', value)
     setLikelyhood(value)
   }
 
   function updateFB() {
-    console.log(`somethign${likelyHood}`)
+    if(user) {
+      const updateRef = firebase.firestore().collection('managers').doc(data.id);
+      data.nps = updateNps(likelyHood, data.nps, user.uid)
+      updateRef.set(data)
+        .then((docRef) => {
+          // success
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    }
   }
 
   return (
@@ -115,6 +122,7 @@ RateManagerModal.propTypes = {
   open: PropTypes.bool.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   data: PropTypes.object,
+  user: PropTypes.object,
 }
 
 RateManagerModal.defaultProps = {
