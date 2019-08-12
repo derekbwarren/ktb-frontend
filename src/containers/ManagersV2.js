@@ -140,9 +140,11 @@ const LightTooltip = withStyles(theme => ({
   },
 }))(Tooltip)
 
+// eslint-disable-next-line max-len
 const hasUserAlreadyRated = (manager, user) => !!(manager.nps && manager.nps.raters && manager.nps.raters.includes(user.uid))
 
-const ManagersV2 = ({ user }) => {
+const ManagersV2 = ({ user, handleLoginToggle }) => {
+  const isLoggedIn = user !== null
   const classes = useStyles()
   // const theme = useTheme()
   // const [managers, setManagers] = useState([])
@@ -207,7 +209,11 @@ const ManagersV2 = ({ user }) => {
                 <LightTooltip TransitionComponent={Zoom} title={<NetPromoterScore />} placement="top" interactive>
                   <div className={classes.ratingContainer}>
                     <Typography component="h5" variant="h5" className={classes[getRatingClass(nps.nps)]}>
-                      {nps.nps}
+                      {
+                        nps.respondents > 0
+                          ? nps.nps
+                          : <Typography variant="subtitle1" component="span" color="textSecondary">Not Yet Rated</Typography>
+                        }
                     </Typography>
                     <Typography variant="subtitle1" color="textSecondary">
                       Rating
@@ -217,7 +223,20 @@ const ManagersV2 = ({ user }) => {
               </CardContent>
               <CardActions>
                 {!(user && hasUserAlreadyRated(manager, user))
-                  ? <Button size="small" onClick={() => { setCurrentManager(manager); setModalOpen(true) }}>Rate Manager</Button>
+                  ? (
+                    <Button
+                      size="small"
+                      onClick={() => {
+                        if (!isLoggedIn) {
+                          handleLoginToggle()
+                        } else {
+                          setCurrentManager(manager); setModalOpen(true)
+                        }
+                      }}
+                    >
+                      {'Rate Manager'}
+                    </Button>
+                  )
                   : <Typography variant="subtitle1" color="textSecondary">Thank you for rating this manager!</Typography>
                 }
               </CardActions>
@@ -239,10 +258,12 @@ const ManagersV2 = ({ user }) => {
 ManagersV2.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   user: PropTypes.object,
+  handleLoginToggle: PropTypes.func,
 }
 
 ManagersV2.defaultProps = {
   user: null,
+  handleLoginToggle: null,
 }
 
 export default ManagersV2

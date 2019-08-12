@@ -5,10 +5,9 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import 'firebase/auth';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
+import 'firebase/auth'
 
-import firebase from '../../firebase'
 
 import {
   AppBar,
@@ -35,6 +34,7 @@ import {
 import {
   Menu as MenuIcon, AccountCircle,
 } from '@material-ui/icons'
+import firebase from '../../firebase'
 import { navItems } from '../../constants'
 
 const DRAWER_WIDTH = 280
@@ -143,8 +143,6 @@ const SideDrawerV2 = ({
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
 
-  navItems.find(item => item.text === 'Add New Manager').display = isLoggedIn
-
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
   }
@@ -192,7 +190,11 @@ const SideDrawerV2 = ({
                 key={item.text}
                 selected={pathname === item.link}
                 onClick={() => {
-                  history.push(item.link); if (mobileOpen) { handleDrawerToggle() }
+                  if (!isLoggedIn && item.link === '/managers/new') {
+                    handleLoginToggle()
+                  } else {
+                    history.push(item.link); if (mobileOpen) { handleDrawerToggle() }
+                  }
                 }}
               >
                 <ListItemIcon style={{ color: '#fff' }}>{item.icon}</ListItemIcon>
@@ -224,10 +226,13 @@ const SideDrawerV2 = ({
           </Typography>
           {!isLoggedIn && <Button color="primary" style={{ color: 'rgb(32, 122, 204)' }} onClick={handleLoginToggle}>Login</Button>}
           {isLoggedIn && (
-            <div>
-                            {/* style me please */}
-
-              {user.displayName && <span>{user.displayName}</span>}
+            <div style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+            >
+              <Typography color="textSecondary" style={{ paddingRight: '8px' }}>{user.displayName && <span>{user.displayName}</span>}</Typography>
               <IconButton
                 aria-label="account of current user"
                 aria-controls="menu-appbar"

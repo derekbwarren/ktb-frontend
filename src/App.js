@@ -86,7 +86,7 @@ class App extends Component {
               path="/managers"
               render={props => (
                 // <ManagerList {...props} />
-                <ManagersV2 {...props} {...this.state} />
+                <ManagersV2 {...props} {...this.state} handleLoginToggle={this.handleLoginToggle} />
               )}
             />
             <Route

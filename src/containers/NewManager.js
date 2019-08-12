@@ -7,7 +7,7 @@ import {
   Button, MenuItem, TextField, Typography,
 } from '@material-ui/core'
 
-import firebase from '../firebase';
+import firebase from '../firebase'
 import updateNps from '../Utils/updateNps'
 
 const useStyles = makeStyles(theme => ({
@@ -72,6 +72,9 @@ const useStyles = makeStyles(theme => ({
   lastField: {
     margin: '8px 8px 16px 8px',
   },
+  submit: {
+    backgroundColor: 'rgb(32, 122, 204)',
+  },
 }))
 
 const DEFAULT_VALUES = {
@@ -81,15 +84,15 @@ const DEFAULT_VALUES = {
   level: '',
   organization: '',
   rating: -1,
-  nps: {}
+  nps: {},
 }
 
-const NewManager = ({user}) => {
+const NewManager = ({ user }) => {
   const classes = useStyles()
   const [values, setValues] = React.useState(DEFAULT_VALUES)
-  const [successFullyAdded, setSuccessfullyAdded] = useState(false);
+  const [successFullyAdded, setSuccessfullyAdded] = useState(false)
 
-const marks = [...Array(11).keys()].reverse().map(key => ({ value: key, label: `${key}` }))
+  const marks = [...Array(11).keys()].reverse().map(key => ({ value: key, label: `${key}` }))
 
   const handleChange = field => (e) => {
     const { value } = e.target
@@ -104,10 +107,10 @@ const marks = [...Array(11).keys()].reverse().map(key => ({ value: key, label: `
       .add(values)
       .then(() => {
         setValues(DEFAULT_VALUES)
-        setSuccessfullyAdded(true);
+        setSuccessfullyAdded(true)
         setTimeout(() => {
-          setSuccessfullyAdded(false);
-        }, 3000);
+          setSuccessfullyAdded(false)
+        }, 3000)
       })
   }
 
@@ -249,6 +252,7 @@ const marks = [...Array(11).keys()].reverse().map(key => ({ value: key, label: `
           style={{
             margin: 8,
             width: '100%',
+            backgroundColor: 'rgb(32, 122, 204)',
           }}
           type="submit"
         >
@@ -260,6 +264,12 @@ const marks = [...Array(11).keys()].reverse().map(key => ({ value: key, label: `
 }
 
 NewManager.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
   user: PropTypes.object,
 }
+
+NewManager.defaultProps = {
+  user: null,
+}
+
 export default NewManager
