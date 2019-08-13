@@ -2,7 +2,9 @@
 import React, { Component, Fragment } from 'react'
 import { Redirect, Route, Switch } from 'react-router'
 import { SnackbarProvider } from 'notistack'
-import { ManagerList, NewManager, ManagersV2 } from './containers'
+import {
+  ManagerList, NewManager, ManagersV2, Home,
+} from './containers'
 import { SideDrawerV2, LoginModal } from './components'
 import firebase, { auth, provider } from './firebase/Firebase'
 
@@ -78,7 +80,7 @@ class App extends Component {
               <Route
                 exact
                 path="/"
-                render={() => (
+                render={props => (
                   // <Home {...props} />
                   <Redirect push to="/managers" />
                 )}
