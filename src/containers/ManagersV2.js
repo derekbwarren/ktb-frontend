@@ -268,7 +268,7 @@ const ManagersV2 = ({ user, handleLoginToggle, location }) => {
                     </Typography>
                   </div>
                 </div>
-                <LightTooltip TransitionComponent={Zoom} title={<NetPromoterScore />} placement="top" interactive>
+                <LightTooltip TransitionComponent={Zoom} title={<NetPromoterScore nps={nps} />} placement="top" interactive disableFocusListener>
                   <div className={classes.ratingContainer}>
                     <Typography component="h5" variant="h5">
                       {
