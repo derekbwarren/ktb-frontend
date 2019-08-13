@@ -161,17 +161,16 @@ const LightTooltip = withStyles(theme => ({
 // eslint-disable-next-line max-len
 const hasUserAlreadyRated = (manager, user) => !!(manager.nps && manager.nps.raters && manager.nps.raters.includes(user.uid))
 
-const ManagersV2 = ({ user, handleLoginToggle }) => {
+const ManagersV2 = ({ user, handleLoginToggle, location }) => {
+  const { state } = location
+  const newManagerId = state && state.newManagerId
   const isLoggedIn = user !== null
   const classes = useStyles()
-  // const theme = useTheme()
-  // const [managers, setManagers] = useState([])
   const [modalOpen, setModalOpen] = useState(false)
   const [currentManager, setCurrentManager] = useState({})
 
   const [sortBy, setSortBy] = useState('NAME_ASC')
   const managers = useManagers(sortBy)
-
 
   const getRatingClass = (rating) => {
     if (rating > 75) { return 'worldClass' }
@@ -187,6 +186,7 @@ const ManagersV2 = ({ user, handleLoginToggle }) => {
     if (rating > 0) { return 'Good' }
     if (rating === 0) { return 'Needs Improvement' }
     if (rating < 0) { return 'Avoid' }
+    return ''
   }
   const handleFilter = () => {
     // eslint-disable-next-line max-len
@@ -247,7 +247,7 @@ const ManagersV2 = ({ user, handleLoginToggle }) => {
             id, firstName, lastName, company, level, organization, nps,
           } = manager
           return (
-            <Card className={classes.card} key={`${lastName}-${id}`}>
+            <Card className={`${classes.card} ${newManagerId === id ? 'new-manager-pulse' : ''}`} key={`${lastName}-${id}`}>
               <CardContent className={classes.cardContent}>
                 <div>
                   <Typography className={classes.title} color="textSecondary" gutterBottom>
@@ -268,7 +268,7 @@ const ManagersV2 = ({ user, handleLoginToggle }) => {
                     </Typography>
                   </div>
                 </div>
-                <LightTooltip TransitionComponent={Zoom} title={<NetPromoterScore />} placement="top" interactive>
+                <LightTooltip TransitionComponent={Zoom} title={<NetPromoterScore nps={nps} />} placement="top" interactive disableFocusListener>
                   <div className={classes.ratingContainer}>
                     <Typography component="h5" variant="h5">
                       {
@@ -319,11 +319,14 @@ ManagersV2.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   user: PropTypes.object,
   handleLoginToggle: PropTypes.func,
+  // eslint-disable-next-line react/forbid-prop-types
+  location: PropTypes.object,
 }
 
 ManagersV2.defaultProps = {
   user: null,
   handleLoginToggle: null,
+  location: null,
 }
 
 export default ManagersV2

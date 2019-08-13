@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import {
   Button, MenuItem, TextField, Typography,
 } from '@material-ui/core'
+import { useSnackbar } from 'notistack'
 
 import firebase from '../firebase'
 import updateNps from '../Utils/updateNps'
@@ -87,10 +88,11 @@ const DEFAULT_VALUES = {
   nps: {},
 }
 
-const NewManager = ({ user }) => {
+const NewManager = ({ user, history }) => {
+  const { enqueueSnackbar } = useSnackbar()
   const classes = useStyles()
-  const [values, setValues] = React.useState(DEFAULT_VALUES)
-  const [successFullyAdded, setSuccessfullyAdded] = useState(false)
+  const [values, setValues] = useState(DEFAULT_VALUES)
+  // const [successfullyAdded, setSuccessfullyAdded] = useState(false)
 
   const marks = [...Array(11).keys()].reverse().map(key => ({ value: key, label: `${key}` }))
 
@@ -105,12 +107,18 @@ const NewManager = ({ user }) => {
       .firestore()
       .collection('managers')
       .add(values)
-      .then(() => {
+      .then((res) => {
+        console.log('new res', res.id)
         setValues(DEFAULT_VALUES)
-        setSuccessfullyAdded(true)
-        setTimeout(() => {
-          setSuccessfullyAdded(false)
-        }, 3000)
+        // setSuccessfullyAdded(true)
+        enqueueSnackbar('Successfully Added!', { variant: 'success', anchorOrigin: { vertical: 'top', horizontal: 'right' } })
+        // setTimeout(() => {
+        //   setSuccessfullyAdded(false)
+        // }, 3000)
+        history.push({
+          pathname: '/managers',
+          state: { newManagerId: res.id },
+        })
       })
   }
 
@@ -120,7 +128,7 @@ const NewManager = ({ user }) => {
         Add New Manager
       </Typography>
       <form className={classes.container} noValidate={false} autoComplete="off" onSubmit={handleSubmit}>
-        {successFullyAdded && <span className={classes.fieldFlex}>Successfully Added!</span>}
+        {/* {successfullyAdded && <span className={classes.fieldFlex}>Successfully Added!</span>} */}
         <div className={classes.fieldFlex}>
           <TextField
             id="manager-first-name"
@@ -266,10 +274,13 @@ const NewManager = ({ user }) => {
 NewManager.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   user: PropTypes.object,
+  // eslint-disable-next-line react/forbid-prop-types
+  history: PropTypes.object,
 }
 
 NewManager.defaultProps = {
   user: null,
+  history: null,
 }
 
 export default NewManager
