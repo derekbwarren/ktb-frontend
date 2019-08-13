@@ -10,6 +10,7 @@
     "clsx": "^1.0.4",
     "dotenv": "^8.0.0",
     "firebase": "^6.3.4",
+    "fuzzy-search": "^3.0.1",
     "gh-pages": "^2.1.1",
     "history": "^4.9.0",
     "prop-types": "^15.7.2",
@@ -19,8 +20,8 @@
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
-    "react-with-firebase-auth": "^1.0.3",
     "react-social-login-buttons": "^3.0.0",
+    "react-with-firebase-auth": "^1.0.3",
     "styled-components": "^4.3.2"
   },
   "scripts": {
