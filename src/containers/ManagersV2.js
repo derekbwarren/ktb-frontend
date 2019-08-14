@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import {
-  Button, Card, CardContent, Typography, TextField, Tooltip, Zoom, CardActions, Chip,
+  Button, Card, CardContent, Typography, TextField, Tooltip, Zoom, CardActions, Chip, MenuItem,
 } from '@material-ui/core'
 import {
   InfoOutlined,
@@ -58,10 +58,8 @@ const useStyles = makeStyles(theme => ({
     },
   },
   buttonContainer: {
-    margin: '0 auto',
     flexDirection: 'row',
-    textAlign: 'center',
-    padding: '1em',
+    textAlign: 'flex-start',
   },
   textField: {
     marginTop: '0',
@@ -146,6 +144,9 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
+  menu: {
+    width: 200,
+  },
   worldClass: {
     color: 'green',
   },
@@ -209,42 +210,39 @@ const ManagersV2 = ({ user, handleLoginToggle, location }) => {
   const handleModelClose = () => {
     setModalOpen(false)
   }
-
-  const handleBestManagers = () => {
-    setSortBy('NPS_ASC')
-  }
-
-  const handleWorstManagers = () => {
-    setSortBy('NPS_DESC')
-  }
-
-  const handleAllManagers = () => {
-    setSortBy('NAME_ASC')
+  const handleSortChange = (e) => {
+    const { value } = e.target
+    setSortBy(value)
   }
 
   return (
     <Fragment>
       <div className={classes.buttonContainer}>
-        <Button
-          id="ascending-manager-name"
-          onClick={handleAllManagers}
+        <TextField
+          id="manager-company"
+          select
+          label="Sort By"
+          className={classes.textField}
+          value={sortBy}
+          onChange={handleSortChange}
+          SelectProps={{
+            MenuProps: {
+              className: classes.menu,
+            },
+          }}
+          margin="normal"
+          variant="outlined"
         >
-          All Managers
-        </Button>
-        <Button
-          id="ascending-managers-nps"
-          onClick={handleWorstManagers}
-          color="primary"
-        >
-          Recommended
-        </Button>
-        <Button
-          id="descending-managers-nps"
-          onClick={handleBestManagers}
-          color="secondary"
-        >
-          Not Recommended
-        </Button>
+          <MenuItem value="NAME_ASC">
+            All Managers
+          </MenuItem>
+          <MenuItem value="NPS_DESC">
+            Recommended
+          </MenuItem>
+          <MenuItem value="NPS_ASC" style={{ color: 'red' }}>
+            Not Recommended
+          </MenuItem>
+        </TextField>
       </div>
       {/* <TextField
         id="filter-managers"
