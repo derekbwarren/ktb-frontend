@@ -71,12 +71,17 @@ const useStyles = makeStyles(theme => ({
     },
   },
   card: {
-    minWidth: 275,
-    maxWidth: 275,
+    minWidth: 294,
+    maxWidth: 294,
     margin: '0 16px 16px 0',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+      maxWidth: 'none',
+      marginRight: 0,
+    },
   },
   cardContent: {
     display: 'flex',
