@@ -10,6 +10,7 @@
     "clsx": "^1.0.4",
     "dotenv": "^8.0.0",
     "firebase": "^6.3.4",
+    "fuzzy-search": "^3.0.1",
     "gh-pages": "^2.1.1",
     "history": "^4.9.0",
     "notistack": "^0.8.9",
