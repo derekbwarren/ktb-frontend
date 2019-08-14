@@ -5,6 +5,9 @@ import { makeStyles, withStyles } from '@material-ui/core/styles'
 import {
   Button, Card, CardContent, Typography, TextField, Tooltip, Zoom, CardActions, Chip,
 } from '@material-ui/core'
+import {
+  InfoOutlined,
+} from '@material-ui/icons'
 import { NetPromoterScore, RateManagerModal } from '../components'
 // import { SkipNext, SkipPrevious, PlayArrow } from '@material-ui/icons'
 import firebase from '../firebase'
@@ -137,6 +140,12 @@ const useStyles = makeStyles(theme => ({
       cursor: 'default',
     },
   },
+  iconContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
   worldClass: {
     color: 'green',
   },
@@ -227,14 +236,14 @@ const ManagersV2 = ({ user, handleLoginToggle, location }) => {
           onClick={handleWorstManagers}
           color="primary"
         >
-            Recommended
+          Recommended
         </Button>
         <Button
           id="descending-managers-nps"
           onClick={handleBestManagers}
           color="secondary"
         >
-            Not Recommended
+          Not Recommended
         </Button>
       </div>
       {/* <TextField
@@ -247,68 +256,71 @@ const ManagersV2 = ({ user, handleLoginToggle, location }) => {
       /> */}
       <div className={classes.container}>
         {
-        managers.map((manager) => {
-          const {
-            id, firstName, lastName, company, level, organization, nps,
-          } = manager
-          return (
-            <Card className={`${classes.card} ${newManagerId === id ? 'new-manager-pulse' : ''}`} key={`${lastName}-${id}`}>
-              <CardContent className={classes.cardContent}>
-                <div>
-                  <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    {company}
-                  </Typography>
-                  <Typography variant="h5" component="h2">
-                    {firstName}
-                    {' '}
-                    {lastName}
-                  </Typography>
-                  <div className={classes.pos}>
-                    <Typography color="textSecondary">
-                      {level}
-                      {' '}
-                    &mdash;
-                      {' '}
-                      {organization}
+          managers.map((manager) => {
+            const {
+              id, firstName, lastName, company, level, organization, nps,
+            } = manager
+            return (
+              <Card className={`${classes.card} ${newManagerId === id ? 'new-manager-pulse' : ''}`} key={`${lastName}-${id}`}>
+                <CardContent className={classes.cardContent}>
+                  <div>
+                    <Typography className={classes.title} color="textSecondary" gutterBottom>
+                      {company}
                     </Typography>
+                    <Typography variant="h5" component="h2">
+                      {firstName}
+                      {' '}
+                      {lastName}
+                    </Typography>
+                    <div className={classes.pos}>
+                      <Typography color="textSecondary">
+                        {level}
+                        {' '}
+                        &mdash;
+                        {' '}
+                        {organization}
+                      </Typography>
+                    </div>
                   </div>
-                </div>
-                <LightTooltip TransitionComponent={Zoom} title={<NetPromoterScore nps={nps} />} placement="top" interactive disableFocusListener>
                   <div className={classes.ratingContainer}>
-                    <Typography component="h5" variant="h5">
-                      {
-                        nps.respondents > 0
-                          ? `${nps.nps}`
-                          : <Typography component="span" color="textSecondary">Not Yet Rated</Typography>
-                        }
-                    </Typography>
-                    <Chip variant="outlined" size="small" label={getRatingText(nps.nps)} className={classes[getRatingClass(nps.nps)]} />
+                    <div className={classes.iconContainer}>
+                      <Typography component="h5" variant="h5">
+                        {
+                            nps.respondents > 0
+                              ? `${nps.nps}`
+                              : <Typography component="span" color="textSecondary">Not Yet Rated</Typography>
+                          }
+                      </Typography>
+                      <LightTooltip TransitionComponent={Zoom} title={<NetPromoterScore nps={nps} />} placement="top" interactive disableFocusListener>
+                        <InfoOutlined style={{ paddingLeft: '4px' }} />
+                      </LightTooltip>
+                    </div>
+                    {nps.respondents > 0 && <Chip variant="outlined" size="small" label={getRatingText(nps.nps)} className={classes[getRatingClass(nps.nps)]} />}
                   </div>
-                </LightTooltip>
-              </CardContent>
-              <CardActions>
-                {!(user && hasUserAlreadyRated(manager, user))
-                  ? (
-                    <Button
-                      size="small"
-                      onClick={() => {
-                        if (!isLoggedIn) {
-                          handleLoginToggle()
-                        } else {
-                          setCurrentManager(manager); setModalOpen(true)
-                        }
-                      }}
-                    >
-                      {'Rate Manager'}
-                    </Button>
-                  )
-                  : <Typography variant="subtitle1" color="textSecondary">Thank you for rating this manager!</Typography>
-                }
-              </CardActions>
-            </Card>
-          )
-        })
-      }
+                </CardContent>
+                <CardActions>
+                  {!(user && hasUserAlreadyRated(manager, user))
+                    ? (
+                      <Button
+                        size="small"
+                        onClick={() => {
+                          if (!isLoggedIn) {
+                            handleLoginToggle()
+                          } else {
+                            setCurrentManager(manager); setModalOpen(true)
+                          }
+                        }}
+                      >
+                        {'Rate Manager'}
+                      </Button>
+                    )
+                    : <Typography variant="subtitle1" color="textSecondary">Thank you for rating this manager!</Typography>
+                  }
+                </CardActions>
+              </Card>
+            )
+          })
+        }
       </div>
       <RateManagerModal
         open={modalOpen}
