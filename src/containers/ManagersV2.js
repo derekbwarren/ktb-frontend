@@ -5,6 +5,7 @@ import { makeStyles, withStyles } from '@material-ui/core/styles'
 import {
   Button, Card, CardContent, Typography, TextField, Tooltip, Zoom, CardActions, Chip,
 } from '@material-ui/core'
+import FuzzySearch from 'fuzzy-search'
 import { NetPromoterScore, RateManagerModal } from '../components'
 // import { SkipNext, SkipPrevious, PlayArrow } from '@material-ui/icons'
 import firebase from '../firebase'
@@ -19,7 +20,7 @@ const SORT_OPTIONS = {
   NPS_ASC: { column: 'nps.nps', direction: 'asc' },
   NPS_DESC: { column: 'nps.nps', direction: 'desc' },
 }
-function useManagers(sortBy = 'NAME_ASC') {
+function useManagers(sortBy = 'NAME_ASC', setFilterredManagers) {
   const [managers, setManagers] = useState([])
 
   useEffect(() => {
@@ -33,6 +34,7 @@ function useManagers(sortBy = 'NAME_ASC') {
           ...doc.data(),
         }))
         setManagers(newManagers)
+        setFilterredManagers(newManagers)
       })
 
     return () => unsubscribe()
@@ -168,10 +170,12 @@ const ManagersV2 = ({ user, handleLoginToggle, location }) => {
   const classes = useStyles()
   const [modalOpen, setModalOpen] = useState(false)
   const [currentManager, setCurrentManager] = useState({})
+  const [filterredManagers, setFilterredManagers] = useState([])
 
   const [sortBy, setSortBy] = useState('NAME_ASC')
-  const managers = useManagers(sortBy)
+  const managers = useManagers(sortBy, setFilterredManagers)
 
+  const [filterText, setFilterText] = useState('')
   const getRatingClass = (rating) => {
     if (rating > 75) { return 'worldClass' }
     if (rating > 50) { return 'excellent' }
@@ -179,6 +183,14 @@ const ManagersV2 = ({ user, handleLoginToggle, location }) => {
     if (rating < 0) { return 'bad' }
     return 'default'
   }
+
+  const searcher = new FuzzySearch(managers, ['firstName', 'lastName'], {
+    caseSensitive: false,
+  })
+
+  useEffect(() => {
+    setFilterredManagers(searcher.search(filterText))
+  }, [filterText])
 
   const getRatingText = (rating) => {
     if (rating > 75) { return 'World Class' }
@@ -188,10 +200,7 @@ const ManagersV2 = ({ user, handleLoginToggle, location }) => {
     if (rating < 0) { return 'Avoid' }
     return ''
   }
-  const handleFilter = () => {
-    // eslint-disable-next-line max-len
-    // setManagers(managers.filter(manager => manager.firstName.includes(filterText) || manager.lastName.includes(filterText)))
-  }
+
   const handleModelClose = () => {
     setModalOpen(false)
   }
@@ -232,17 +241,17 @@ const ManagersV2 = ({ user, handleLoginToggle, location }) => {
             Not Recommended
         </Button>
       </div>
-      {/* <TextField
+      {<TextField
         id="filter-managers"
         label="Filter Managers"
         type="search"
         className={classes.textField}
         value={filterText}
-        onChange={(e) => { setFilter(e.target.value); handleFilter() }}
-      /> */}
+        onChange={(e) => { setFilterText(e.target.value) }}
+      />}
       <div className={classes.container}>
         {
-        managers.map((manager) => {
+        filterredManagers.map((manager) => {
           const {
             id, firstName, lastName, company, level, organization, nps,
           } = manager
