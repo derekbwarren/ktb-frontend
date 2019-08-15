@@ -3,9 +3,12 @@ import PropTypes from 'prop-types'
 
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import {
-  Button, Card, CardContent, Typography, TextField, Tooltip, Zoom, CardActions, Chip,
+  Button, Card, CardContent, Typography, TextField, Tooltip, Zoom, CardActions, Chip, MenuItem,
 } from '@material-ui/core'
 import FuzzySearch from 'fuzzy-search'
+import {
+  InfoOutlined,
+} from '@material-ui/icons'
 import { NetPromoterScore, RateManagerModal } from '../components'
 // import { SkipNext, SkipPrevious, PlayArrow } from '@material-ui/icons'
 import firebase from '../firebase'
@@ -57,10 +60,8 @@ const useStyles = makeStyles(theme => ({
     },
   },
   buttonContainer: {
-    margin: '0 auto',
     flexDirection: 'row',
-    textAlign: 'center',
-    padding: '1em',
+    textAlign: 'flex-start',
   },
   textField: {
     marginTop: '0',
@@ -73,12 +74,17 @@ const useStyles = makeStyles(theme => ({
     },
   },
   card: {
-    minWidth: 275,
-    maxWidth: 275,
+    minWidth: 294,
+    maxWidth: 294,
     margin: '0 16px 16px 0',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+      maxWidth: 'none',
+      marginRight: 0,
+    },
   },
   cardContent: {
     display: 'flex',
@@ -134,6 +140,15 @@ const useStyles = makeStyles(theme => ({
       cursor: 'default',
     },
   },
+  iconContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  menu: {
+    width: 200,
+  },
   worldClass: {
     color: 'green',
   },
@@ -171,6 +186,7 @@ const ManagersV2 = ({ user, handleLoginToggle, location }) => {
   const [modalOpen, setModalOpen] = useState(false)
   const [currentManager, setCurrentManager] = useState({})
   const [filterredManagers, setFilterredManagers] = useState([])
+  const [currentCompany, setCurrentCompany] = useState('Capital One')
 
   const [sortBy, setSortBy] = useState('NAME_ASC')
   const managers = useManagers(sortBy, setFilterredManagers)
@@ -204,42 +220,60 @@ const ManagersV2 = ({ user, handleLoginToggle, location }) => {
   const handleModelClose = () => {
     setModalOpen(false)
   }
-
-  const handleBestManagers = () => {
-    setSortBy('NPS_ASC')
-  }
-
-  const handleWorstManagers = () => {
-    setSortBy('NPS_DESC')
-  }
-
-  const handleAllManagers = () => {
-    setSortBy('NAME_ASC')
+  const handleSortChange = (e) => {
+    const { value } = e.target
+    setSortBy(value)
   }
 
   return (
     <Fragment>
       <div className={classes.buttonContainer}>
-        <Button
-          id="ascending-manager-name"
-          onClick={handleAllManagers}
+        <TextField
+          id="company-namespace"
+          select
+          label="Current Company"
+          className={classes.textField}
+          value={currentCompany}
+          onChange={setCurrentCompany}
+          SelectProps={{
+            MenuProps: {
+              className: classes.menu,
+            },
+          }}
+          margin="normal"
+          variant="outlined"
+          disabled
         >
-          All Managers
-        </Button>
-        <Button
-          id="ascending-managers-nps"
-          onClick={handleWorstManagers}
-          color="primary"
+          <MenuItem value="Capital One">
+            Capital One
+          </MenuItem>
+        </TextField>
+        <TextField
+          id="manager-sort"
+          select
+          label="Sort By"
+          className={classes.textField}
+          value={sortBy}
+          onChange={handleSortChange}
+          SelectProps={{
+            MenuProps: {
+              className: classes.menu,
+            },
+          }}
+          margin="normal"
+          variant="outlined"
+          style={{ marginLeft: 8 }}
         >
+          <MenuItem value="NAME_ASC">
+            All Managers
+          </MenuItem>
+          <MenuItem value="NPS_DESC">
             Recommended
-        </Button>
-        <Button
-          id="descending-managers-nps"
-          onClick={handleBestManagers}
-          color="secondary"
-        >
+          </MenuItem>
+          <MenuItem value="NPS_ASC" style={{ color: 'red' }}>
             Not Recommended
-        </Button>
+          </MenuItem>
+        </TextField>
       </div>
       {<TextField
         id="filter-managers"
@@ -251,68 +285,71 @@ const ManagersV2 = ({ user, handleLoginToggle, location }) => {
       />}
       <div className={classes.container}>
         {
-        filterredManagers.map((manager) => {
-          const {
-            id, firstName, lastName, company, level, organization, nps,
-          } = manager
-          return (
-            <Card className={`${classes.card} ${newManagerId === id ? 'new-manager-pulse' : ''}`} key={`${lastName}-${id}`}>
-              <CardContent className={classes.cardContent}>
-                <div>
-                  <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    {company}
-                  </Typography>
-                  <Typography variant="h5" component="h2">
-                    {firstName}
-                    {' '}
-                    {lastName}
-                  </Typography>
-                  <div className={classes.pos}>
-                    <Typography color="textSecondary">
-                      {level}
-                      {' '}
-                    &mdash;
-                      {' '}
-                      {organization}
+          filterredManagers.map((manager) => {
+            const {
+              id, firstName, lastName, company, level, organization, nps,
+            } = manager
+            return (
+              <Card className={`${classes.card} ${newManagerId === id ? 'new-manager-pulse' : ''}`} key={`${lastName}-${id}`}>
+                <CardContent className={classes.cardContent}>
+                  <div>
+                    <Typography className={classes.title} color="textSecondary" gutterBottom>
+                      {company}
                     </Typography>
+                    <Typography variant="h5" component="h2">
+                      {firstName}
+                      {' '}
+                      {lastName}
+                    </Typography>
+                    <div className={classes.pos}>
+                      <Typography color="textSecondary">
+                        {level}
+                        {' '}
+                        &mdash;
+                        {' '}
+                        {organization}
+                      </Typography>
+                    </div>
                   </div>
-                </div>
-                <LightTooltip TransitionComponent={Zoom} title={<NetPromoterScore nps={nps} />} placement="top" interactive disableFocusListener>
                   <div className={classes.ratingContainer}>
-                    <Typography component="h5" variant="h5">
-                      {
-                        nps.respondents > 0
-                          ? `${nps.nps}`
-                          : <Typography component="span" color="textSecondary">Not Yet Rated</Typography>
-                        }
-                    </Typography>
-                    <Chip variant="outlined" size="small" label={getRatingText(nps.nps)} className={classes[getRatingClass(nps.nps)]} />
+                    <div className={classes.iconContainer}>
+                      <Typography component="h5" variant="h5">
+                        {
+                            nps.respondents > 0
+                              ? `${nps.nps}`
+                              : <Typography component="span" color="textSecondary">Not Yet Rated</Typography>
+                          }
+                      </Typography>
+                      <LightTooltip TransitionComponent={Zoom} title={<NetPromoterScore nps={nps} />} placement="top" interactive disableFocusListener>
+                        <InfoOutlined style={{ paddingLeft: '4px' }} />
+                      </LightTooltip>
+                    </div>
+                    {nps.respondents > 0 && <Chip variant="outlined" size="small" label={getRatingText(nps.nps)} className={classes[getRatingClass(nps.nps)]} />}
                   </div>
-                </LightTooltip>
-              </CardContent>
-              <CardActions>
-                {!(user && hasUserAlreadyRated(manager, user))
-                  ? (
-                    <Button
-                      size="small"
-                      onClick={() => {
-                        if (!isLoggedIn) {
-                          handleLoginToggle()
-                        } else {
-                          setCurrentManager(manager); setModalOpen(true)
-                        }
-                      }}
-                    >
-                      {'Rate Manager'}
-                    </Button>
-                  )
-                  : <Typography variant="subtitle1" color="textSecondary">Thank you for rating this manager!</Typography>
-                }
-              </CardActions>
-            </Card>
-          )
-        })
-      }
+                </CardContent>
+                <CardActions>
+                  {!(user && hasUserAlreadyRated(manager, user))
+                    ? (
+                      <Button
+                        size="small"
+                        onClick={() => {
+                          if (!isLoggedIn) {
+                            handleLoginToggle()
+                          } else {
+                            setCurrentManager(manager); setModalOpen(true)
+                          }
+                        }}
+                      >
+                        {'Rate Manager'}
+                      </Button>
+                    )
+                    : <Typography variant="subtitle1" color="textSecondary">Thank you for rating this manager!</Typography>
+                  }
+                </CardActions>
+              </Card>
+            )
+          })
+        }
       </div>
       <RateManagerModal
         open={modalOpen}
