@@ -183,6 +183,7 @@ const ManagersV2 = ({ user, handleLoginToggle, location }) => {
   const classes = useStyles()
   const [modalOpen, setModalOpen] = useState(false)
   const [currentManager, setCurrentManager] = useState({})
+  const [currentCompany, setCurrentCompany] = useState('Capital One')
 
   const [sortBy, setSortBy] = useState('NAME_ASC')
   const managers = useManagers(sortBy)
@@ -219,7 +220,27 @@ const ManagersV2 = ({ user, handleLoginToggle, location }) => {
     <Fragment>
       <div className={classes.buttonContainer}>
         <TextField
-          id="manager-company"
+          id="company-namespace"
+          select
+          label="Current Company"
+          className={classes.textField}
+          value={currentCompany}
+          onChange={setCurrentCompany}
+          SelectProps={{
+            MenuProps: {
+              className: classes.menu,
+            },
+          }}
+          margin="normal"
+          variant="outlined"
+          disabled
+        >
+          <MenuItem value="Capital One">
+            Capital One
+          </MenuItem>
+        </TextField>
+        <TextField
+          id="manager-sort"
           select
           label="Sort By"
           className={classes.textField}
@@ -232,6 +253,7 @@ const ManagersV2 = ({ user, handleLoginToggle, location }) => {
           }}
           margin="normal"
           variant="outlined"
+          style={{ marginLeft: 8 }}
         >
           <MenuItem value="NAME_ASC">
             All Managers
